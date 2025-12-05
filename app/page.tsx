@@ -11,24 +11,29 @@ import { useImagePath } from '@/hooks/useImagePath';
 export default function Home() {
   const homepageAboutImage = useImagePath("/homepage-about.jpeg");
   
+  // Projeler sayfasındaki ilk 3 projeyi kullan
+  const project1Image = useImagePath('/homepage-about.jpeg');
+  const project2Image = useImagePath('/park-yesil-alan.jpg');
+  const project3Image = useImagePath('/kultur-tesis.jpg');
+
   const projects = [
     {
-      title: 'Modern Konut Kompleksi',
-      description: 'İstanbul Küçükçekmece bölgesinde 200 daireli lüks konut projesi.',
-      image: 'https://damasturk.com/uploads/2023/53cc16f2ed70640c890660c01598af66e286.png',
+      title: 'Bağcılar Kentsel Dönüşüm Projeleri',
+      description: 'Bağcılar ilçesinde deprem güvenliği ve modern mimari standartlarına uygun kentsel dönüşüm projeleri gerçekleştirilmektedir.',
+      image: project1Image,
       category: 'Konut',
     },
     {
-      title: 'Vakko Ofis Binası',
-      description: 'Modern mimari tasarımla İstanbul\'un en prestijli ofis binalarından.',
-      image: 'https://www.e-architect.com/wp-content/uploads/2023/09/istanbul-vakko-offices-by-hq-architects-h140923-h2.png',
-      category: 'Ticari',
+      title: 'Bağcılar Park ve Yeşil Alan Projeleri',
+      description: 'İlçe genelinde yaşam kalitesini artırmak amacıyla kapsamlı park ve yeşil alan projeleri hayata geçirilmektedir.',
+      image: project2Image,
+      category: 'Altyapı',
     },
     {
-      title: 'Payallar Rezidans',
-      description: 'Doğa ile iç içe, modern yaşam alanları sunan rezidans projesi.',
-      image: 'https://obj.hayatestate.com/storage/real-estates/108/108700/00g-1.jpg',
-      category: 'Rezidans',
+      title: 'Bağcılar Kültür ve Sosyal Tesis Projeleri',
+      description: 'Bağcılar\'da kültürel ve sosyal yaşamı destekleyen modern tesisler inşa edilmektedir.',
+      image: project3Image,
+      category: 'Ticari',
     },
   ];
 
