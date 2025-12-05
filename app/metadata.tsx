@@ -27,21 +27,28 @@ export function FaviconUpdater() {
       const link = document.createElement('link');
       link.rel = 'icon';
       link.type = 'image/png';
-      link.href = `${basePath}/bagkent-logo.png`;
+      link.href = basePath ? `${basePath}/bagkent-logo.png` : '/bagkent-logo.png';
       document.head.appendChild(link);
 
       // Shortcut icon
       const shortcutLink = document.createElement('link');
       shortcutLink.rel = 'shortcut icon';
       shortcutLink.type = 'image/png';
-      shortcutLink.href = `${basePath}/bagkent-logo.png`;
+      shortcutLink.href = basePath ? `${basePath}/bagkent-logo.png` : '/bagkent-logo.png';
       document.head.appendChild(shortcutLink);
 
       // Apple touch icon
       const appleLink = document.createElement('link');
       appleLink.rel = 'apple-touch-icon';
-      appleLink.href = `${basePath}/bagkent-logo.png`;
+      appleLink.href = basePath ? `${basePath}/bagkent-logo.png` : '/bagkent-logo.png';
       document.head.appendChild(appleLink);
+
+      // Favicon.ico alternatifi
+      const faviconIco = document.createElement('link');
+      faviconIco.rel = 'icon';
+      faviconIco.type = 'image/x-icon';
+      faviconIco.href = basePath ? `${basePath}/bagkent-logo.png` : '/bagkent-logo.png';
+      document.head.appendChild(faviconIco);
     };
 
     updateFavicon(`${basePath}/bagkent-logo.png`);
