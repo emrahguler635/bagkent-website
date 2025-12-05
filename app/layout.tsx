@@ -14,8 +14,13 @@ export const metadata: Metadata = {
   description: "BağKent A.Ş. ile modern inşaat projeleri, mimari çözümler ve kaliteli yapılar. İstanbul'da güvenilir inşaat hizmetleri.",
   keywords: "BağKent, inşaat, mimari, yapı, konut, ticari yapı, İstanbul, Bağcılar",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: [
+      { url: "/bagkent-logo.png", type: "image/png", sizes: "any" },
+      { url: "/bagkent-logo.png", type: "image/png", sizes: "32x32" },
+      { url: "/bagkent-logo.png", type: "image/png", sizes: "16x16" },
+    ],
+    shortcut: "/bagkent-logo.png",
+    apple: "/bagkent-logo.png",
   },
   openGraph: {
     title: "BağKent A.Ş. - İnşaat ve Mimari Çözümler",
