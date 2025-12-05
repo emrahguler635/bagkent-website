@@ -79,14 +79,14 @@ const Header = () => {
                 {link?.subLinks ? (
                   <>
                     <button
-                      className={`flex items-center space-x-1 text-base font-semibold transition-colors hover:text-blue-600 ${
+                      className={`flex items-center space-x-1 text-lg font-semibold transition-colors hover:text-blue-600 ${
                         shouldUseScrolledStyle ? 'text-gray-800' : 'text-white drop-shadow-md'
                       }`}
                       onMouseEnter={() => setIsKurumsalOpen(true)}
                       onMouseLeave={() => setIsKurumsalOpen(false)}
                     >
                       <span>{link?.label}</span>
-                      <ChevronDown className="w-4 h-4" />
+                      <ChevronDown className="w-5 h-5" />
                     </button>
                     <AnimatePresence>
                       {isKurumsalOpen && (
@@ -115,7 +115,7 @@ const Header = () => {
                 ) : (
                   <Link
                     href={link?.href ?? '#'}
-                    className={`text-base font-semibold transition-colors hover:text-blue-600 ${
+                    className={`text-lg font-semibold transition-colors hover:text-blue-600 ${
                       shouldUseScrolledStyle ? 'text-gray-800' : 'text-white drop-shadow-md'
                     }`}
                   >
