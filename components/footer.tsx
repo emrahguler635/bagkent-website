@@ -1,9 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
-import { getImagePath } from '@/lib/imagePath';
+import { useImagePath } from '@/hooks/useImagePath';
 
 const Footer = () => {
   const currentYear = 2025;
+  const bagkentLogoPath = useImagePath("/bagkent-logo.png");
+  const belediyeLogoPath = useImagePath("/bagcilar-belediyesi-logo.png");
 
   return (
     <footer className="bg-slate-900 text-white">
@@ -127,14 +131,14 @@ const Footer = () => {
               <div className="flex items-center justify-start space-x-4">
                 <div className="relative w-20 h-20 bg-white rounded-lg p-2 hover:scale-105 transition-transform">
                   <img
-                    src={getImagePath("/bagkent-logo.png")}
+                    src={bagkentLogoPath}
                     alt="BağKent Logo"
                     className="w-full h-full object-contain"
                   />
                 </div>
                 <div className="relative w-20 h-20 bg-white rounded-lg p-2 hover:scale-105 transition-transform">
                   <img
-                    src={getImagePath("/bagcilar-belediyesi-logo.png")}
+                    src={belediyeLogoPath}
                     alt="Bağcılar Belediyesi Logo"
                     className="w-full h-full object-contain"
                   />

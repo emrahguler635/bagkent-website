@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getImagePath } from '@/lib/imagePath';
+import { useImagePath } from '@/hooks/useImagePath';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isKurumsalOpen, setIsKurumsalOpen] = useState(false);
+  const logoPath = useImagePath("/bagkent-logo.png");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +48,7 @@ const Header = () => {
           <Link href="/" className="flex items-center space-x-5 group">
             <div className="relative w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 group-hover:scale-110">
               <img
-                src={getImagePath("/bagkent-logo.png")}
+                src={logoPath}
                 alt="BağKent A.Ş."
                 className="object-contain drop-shadow-2xl w-full h-full"
               />
