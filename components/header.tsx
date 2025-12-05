@@ -2,15 +2,21 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useImagePath } from '@/hooks/useImagePath';
 
 const Header = () => {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isKurumsalOpen, setIsKurumsalOpen] = useState(false);
   const logoPath = useImagePath("/bagkent-logo.png");
+  
+  // Ana sayfa dışında her zaman scrolled gibi davran
+  const isHomePage = pathname === '/';
+  const shouldUseScrolledStyle = isScrolled || !isHomePage;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +43,7 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+        shouldUseScrolledStyle
           ? 'bg-white/95 backdrop-blur-md shadow-lg'
           : 'bg-transparent'
       }`}
@@ -56,7 +62,7 @@ const Header = () => {
             <div>
               <h1
                 className={`text-3xl md:text-5xl font-extrabold tracking-tight transition-all duration-300 ${
-                  isScrolled 
+                  shouldUseScrolledStyle 
                     ? 'text-blue-900' 
                     : 'text-white drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]'
                 }`}
@@ -73,8 +79,8 @@ const Header = () => {
                 {link?.subLinks ? (
                   <>
                     <button
-                      className={`flex items-center space-x-1 font-medium transition-colors hover:text-blue-600 ${
-                        isScrolled ? 'text-gray-700' : 'text-white'
+                      className={`flex items-center space-x-1 text-base font-semibold transition-colors hover:text-blue-600 ${
+                        shouldUseScrolledStyle ? 'text-gray-800' : 'text-white drop-shadow-md'
                       }`}
                       onMouseEnter={() => setIsKurumsalOpen(true)}
                       onMouseLeave={() => setIsKurumsalOpen(false)}
@@ -109,8 +115,8 @@ const Header = () => {
                 ) : (
                   <Link
                     href={link?.href ?? '#'}
-                    className={`font-medium transition-colors hover:text-blue-600 ${
-                      isScrolled ? 'text-gray-700' : 'text-white'
+                    className={`text-base font-semibold transition-colors hover:text-blue-600 ${
+                      shouldUseScrolledStyle ? 'text-gray-800' : 'text-white drop-shadow-md'
                     }`}
                   >
                     {link?.label}
@@ -131,7 +137,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             className={`lg:hidden p-2 rounded-lg transition-colors ${
-              isScrolled ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
+              shouldUseScrolledStyle ? 'text-gray-700 hover:bg-gray-100' : 'text-white hover:bg-white/10'
             }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Menü"
