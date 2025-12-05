@@ -2,44 +2,31 @@
 
 import { motion } from 'framer-motion';
 import { Building2, Users, Award, Target, Lightbulb, Shield } from 'lucide-react';
-import { getImagePath } from '@/lib/imagePath';
+import { useImagePath } from '@/hooks/useImagePath';
 import { useEffect } from 'react';
 
 export default function AboutPage() {
+  const heroImagePath = useImagePath("/hakkimizda-hero.jpeg");
+  const teamImagePath = useImagePath("/hakkimizda-team.jpeg");
+
   // Görselleri önceden yükle (preload)
   useEffect(() => {
-    // BasePath'i algıla
-    let basePath = '';
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname;
-      if (hostname.includes('github.io')) {
-        const href = window.location.href;
-        const match = href.match(/github\.io\/([^\/\?]+)/);
-        if (match && match[1]) {
-          basePath = `/${match[1]}`;
-        } else {
-          const pathname = window.location.pathname;
-          const pathParts = pathname.split('/').filter(Boolean);
-          if (pathParts.length > 0) {
-            basePath = `/${pathParts[0]}`;
-          }
+    if (heroImagePath && teamImagePath) {
+      const preloadImages = [heroImagePath, teamImagePath];
+
+      preloadImages.forEach((src) => {
+        // Daha önce eklenmişse tekrar ekleme
+        const existingLink = document.querySelector(`link[href="${src}"]`);
+        if (!existingLink) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = src;
+          document.head.appendChild(link);
         }
-      }
+      });
     }
-
-    const preloadImages = [
-      `${basePath}/hakkimizda-hero.jpeg`,
-      `${basePath}/hakkimizda-team.jpeg`,
-    ];
-
-    preloadImages.forEach((src) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      document.head.appendChild(link);
-    });
-  }, []);
+  }, [heroImagePath, teamImagePath]);
   const values = [
     {
       icon: Shield,
@@ -76,7 +63,7 @@ export default function AboutPage() {
       <section className="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img
-            src={getImagePath("/hakkimizda-hero.jpeg")}
+            src={heroImagePath}
             alt="BağKent Modern Konut Projesi"
             className="w-full h-full object-cover"
             loading="eager"
@@ -132,7 +119,7 @@ export default function AboutPage() {
             >
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src={getImagePath("/hakkimizda-team.jpeg")}
+                  src={teamImagePath}
                   alt="BağKent A.Ş. Modern Konut Projesi"
                   className="w-full h-full object-cover"
                   loading="eager"
