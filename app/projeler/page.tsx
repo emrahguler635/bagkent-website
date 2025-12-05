@@ -3,61 +3,73 @@
 import { motion } from 'framer-motion';
 import ProjectCard from '@/components/project-card';
 import { Building2, Home, Store, Hammer } from 'lucide-react';
+import { useImagePath } from '@/hooks/useImagePath';
 
 export default function ProjectsPage() {
+  // Proje görselleri için path'ler
+  const project1Image = useImagePath('/homepage-about.jpeg');
+  const project2Image = useImagePath('/hero-bg-2.jpg');
+  const project3Image = useImagePath('/hakkimizda-hero.jpeg');
+  const project4Image = useImagePath('/hakkimizda-team.jpeg');
+  const project5Image = useImagePath('/12.jpeg');
+  const project6Image = useImagePath('/download.jpeg');
+  const project7Image = useImagePath('/image.png');
+  const project8Image = useImagePath('/download (1).png');
+  const project9Image = useImagePath('/DJI_0609.JPG');
+
   const projects = [
     {
       title: 'Bağcılar Kentsel Dönüşüm Projeleri',
       description: 'Bağcılar ilçesinde deprem güvenliği ve modern mimari standartlarına uygun kentsel dönüşüm projeleri gerçekleştirilmektedir. Güvenli ve kaliteli yaşam alanları oluşturarak vatandaşlarımızın yaşam standartlarını yükseltiyoruz. Modern konut alanları, sosyal donatılar ve yeşil alanlar ile bütünleşik projeler.',
-      image: 'https://www.imtilak.net/storage/posts/image_1608792757_xzMoEGJbDHRYRflVyv2tzGYLCy6DhNSlaoxhOUM6.jpeg',
+      image: project1Image,
       category: 'Konut',
     },
     {
       title: 'Bağcılar Park ve Yeşil Alan Projeleri',
       description: 'İlçe genelinde yaşam kalitesini artırmak amacıyla kapsamlı park ve yeşil alan projeleri hayata geçirilmektedir. Çocuk oyun alanları, yürüyüş yolları, fitness alanları ve dinlenme mekanları ile vatandaşlarımıza nefes alabilecekleri modern yeşil alanlar sunuyoruz. Her mahallede erişilebilir park projeleri ile şehir dokusunu zenginleştiriyoruz.',
-      image: 'https://damasturk.com/uploads/2023/53cc16f2ed70640c890660c01598af66e286.png',
+      image: project2Image,
       category: 'Altyapı',
     },
     {
       title: 'Bağcılar Kültür ve Sosyal Tesis Projeleri',
       description: 'Bağcılar\'da kültürel ve sosyal yaşamı destekleyen modern tesisler inşa edilmektedir. Kültür merkezleri, gençlik merkezleri, kütüphaneler ve toplum merkezleri ile vatandaşlarımızın sosyal ihtiyaçlarını karşılıyoruz. Sanat etkinlikleri, eğitim programları ve sosyal aktiviteler için uygun mekanlar oluşturuyoruz.',
-      image: 'https://www.e-architect.com/wp-content/uploads/2025/09/quartz-plaza-istanbul-turkey-office-building-s230925-c-1.webp',
+      image: project3Image,
       category: 'Ticari',
     },
     {
       title: 'Bağcılar Modern Spor Tesisleri',
       description: 'Gençlerimiz ve tüm vatandaşlarımız için modern spor tesisleri projeleri gerçekleştirilmektedir. Kapalı spor salonları, futbol sahaları, basketbol ve voleybol sahaları, yüzme havuzları ve açık spor alanları ile her yaş grubuna uygun spor imkanları sunuyoruz. Sağlıklı yaşam için altyapıyı güçlendiriyoruz.',
-      image: 'https://terrarealestate.com/img/803/-5be5425d5e062.jpg',
+      image: project4Image,
       category: 'Altyapı',
     },
     {
       title: 'Bağcılar Altyapı Modernizasyon Projeleri',
       description: 'Bağcılar\'da yol, su, kanalizasyon, elektrik ve aydınlatma sistemlerinin modernizasyonu kapsamlı olarak sürdürülmektedir. Yeni asfalt yollar, modern kanalizasyon şebekesi, güvenli su dağıtım sistemi ve LED aydınlatma ile ilçenin altyapısını 21. yüzyıl standartlarına taşıyoruz. Daha güvenli ve konforlu bir şehir için altyapı yatırımlarına devam ediyoruz.',
-      image: 'https://static.birgun.net/resim/haber/2025/11/18/more-than-just-exploitation.jpg',
+      image: project5Image,
       category: 'Altyapı',
     },
     {
       title: 'Bağcılar Sağlık ve Eğitim Tesisleri',
       description: 'Bağcılar\'ın sağlık ve eğitim altyapısını güçlendiren modern tesis projeleri hayata geçirilmektedir. Aile sağlık merkezleri, sağlık ocakları, modern okul binaları ve eğitim tesisleri ile vatandaşlarımıza daha iyi hizmet sunuyoruz. Çocuklarımızın ve gençlerimizin kaliteli eğitim alması, tüm vatandaşlarımızın sağlık hizmetlerine kolay erişmesi için çalışıyoruz.',
-      image: 'https://cdnuploads.aa.com.tr/uploads/Contents/2021/03/18/thumbs_b_c_e0cac4bf5a4b81fdcbc65613d83348c7.jpg?v=160553',
+      image: project6Image,
       category: 'Ticari',
     },
     {
       title: 'Bağcılar 3D Dijital Şehir İkizi Projesi',
       description: 'Yapay zeka ve dijital teknolojiler kullanılarak Bağcılar\'ın 3 boyutlu dijital ikizi oluşturulmaktadır. İstanbul Kalkınma Ajansı desteği ile gerçekleştirilen bu proje, afet yönetimi, kentsel planlama ve şehir yönetimi için Coğrafi Bilgi Sistemi tabanlı çözümler sunmaktadır. Akıllı şehir uygulamaları ile Bağcılar\'ı geleceğe taşıyoruz.',
-      image: 'https://www.e-architect.com/wp-content/uploads/2023/09/istanbul-vakko-offices-by-hq-architects-h140923-h2.png',
+      image: project7Image,
       category: 'Altyapı',
     },
     {
       title: 'Bağcılar Enerji Verimliliği ve Akıllı Şehir',
       description: 'Bağcılar\'da enerji verimliliği ve çevre dostu uygulamalar yaygınlaştırılmaktadır. Belediye binalarında LED aydınlatma sistemleri, güneş enerjisi panelleri ve akıllı enerji yönetim sistemleri kurulmaktadır. Kamu alanlarında enerji tasarrufu sağlayan teknolojiler ile hem çevreyi koruyor hem de bütçe tasarrufu sağlıyoruz.',
-      image: 'https://images.divisare.com//image/upload/c_fit,f_jpg,q_80,w_1200/v1/project_images/1883950/VAKKO_05_Credit-Iwan-Baan.jpg',
+      image: project8Image,
       category: 'Altyapı',
     },
     {
       title: 'Bağcılar YTÜ İş Birliği ve Akademik Projeler',
       description: 'Yıldız Teknik Üniversitesi ile imzalanan iş birliği protokolü kapsamında toplumsal fayda odaklı projeler gerçekleştirilmektedir. Bilimsel araştırmalar, kültürel miras çalışmaları, öğrenci staj programları ve uluslararası hibe projeleri ile kent ve akademi arasında köprü kuruyoruz. Gençlerimizin eğitimi ve kentimizin gelişimi için akademik iş birliklerini destekliyoruz.',
-      image: 'https://obj.hayatestate.com/storage/real-estates/108/108700/00g-1.jpg',
+      image: project9Image,
       category: 'Kurumsal',
     },
   ];
