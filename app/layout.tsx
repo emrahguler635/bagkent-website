@@ -4,7 +4,6 @@ import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { FaviconUpdater } from "./metadata";
-import { FaviconUpdater } from "./metadata";
 
 const inter = Inter({ subsets: ["latin"] });
 

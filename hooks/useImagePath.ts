@@ -20,7 +20,12 @@ export function useImagePath(src: string): string {
       try {
         const hostname = window.location.hostname;
 
-        if (hostname.includes('github.io')) {
+        // Özel domain (bagkent.com, bagkent.com.tr) kontrolü - basePath gerekmez
+        const isCustomDomain = hostname === 'bagkent.com' || hostname === 'bagkent.com.tr' || 
+                              hostname.endsWith('.bagkent.com') || hostname.endsWith('.bagkent.com.tr');
+
+        // Sadece GitHub Pages için basePath ekle
+        if (!isCustomDomain && hostname.includes('github.io')) {
           // En garantili yöntem: location.href'den repository adını regex ile çıkar
           const href = window.location.href;
           const match = href.match(/github\.io\/([^\/\?]+)/);

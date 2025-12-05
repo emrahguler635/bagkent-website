@@ -12,9 +12,13 @@ export function getImagePath(src: string): string {
   if (typeof window !== 'undefined') {
     try {
       const hostname = window.location.hostname;
-      
-      // GitHub Pages kontrolü
-      if (hostname.includes('github.io')) {
+
+      // Özel domain (bagkent.com, bagkent.com.tr) kontrolü - basePath gerekmez
+      const isCustomDomain = hostname === 'bagkent.com' || hostname === 'bagkent.com.tr' || 
+                            hostname.endsWith('.bagkent.com') || hostname.endsWith('.bagkent.com.tr');
+
+      // Sadece GitHub Pages için basePath ekle
+      if (!isCustomDomain && hostname.includes('github.io')) {
         // En garantili yöntem: location.href'den repository adını regex ile çıkar
         // https://emrahguler635.github.io/bagkent-website/ formatından bagkent-website'yi al
         const href = window.location.href;

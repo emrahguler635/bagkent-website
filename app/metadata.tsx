@@ -7,13 +7,21 @@ export function FaviconUpdater() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // BasePath'i bul
+    // BasePath'i bul - sadece GitHub Pages için gerekli
     let basePath = '';
     if (typeof window !== 'undefined') {
-      const href = window.location.href;
-      const match = href.match(/github\.io\/([^\/\?]+)/);
-      if (match && match[1]) {
-        basePath = `/${match[1]}`;
+      const hostname = window.location.hostname;
+      // Özel domain (bagkent.com, bagkent.com.tr) kontrolü
+      const isCustomDomain = hostname === 'bagkent.com' || hostname === 'bagkent.com.tr' || 
+                            hostname.endsWith('.bagkent.com') || hostname.endsWith('.bagkent.com.tr');
+      
+      // Sadece GitHub Pages ise basePath ekle
+      if (!isCustomDomain && hostname.includes('github.io')) {
+        const href = window.location.href;
+        const match = href.match(/github\.io\/([^\/\?]+)/);
+        if (match && match[1]) {
+          basePath = `/${match[1]}`;
+        }
       }
     }
 
