@@ -5,8 +5,8 @@ import ProjectCard from '@/components/project-card';
 import FeatureCard from '@/components/feature-card';
 import { Building2, Shield, Users, Wrench, TrendingUp, HeartHandshake } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { getImagePath } from '@/lib/imagePath';
 
 export default function Home() {
   const projects = [
@@ -104,11 +104,10 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl"
             >
-              <Image
-                src="/homepage-about.jpeg"
+              <img
+                src={getImagePath("/homepage-about.jpeg")}
                 alt="BağKent Modern Konut Projesi"
-                fill
-                className="object-cover"
+                className="w-full h-full object-cover"
               />
             </motion.div>
           </div>

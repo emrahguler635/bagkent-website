@@ -3,8 +3,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Building2, Users, Award } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { getImagePath } from '@/lib/imagePath';
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -42,12 +42,10 @@ const HeroSection = () => {
             transition={{ duration: 1 }}
             className="relative w-full h-full"
           >
-            <Image
-              src={slides[currentSlide].src}
+            <img
+              src={getImagePath(slides[currentSlide].src)}
               alt={slides[currentSlide].alt}
-              fill
-              className="object-cover"
-              priority={currentSlide === 0}
+              className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-900/80 to-blue-800/70" />
           </motion.div>
