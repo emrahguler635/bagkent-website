@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useImagePath } from '@/hooks/useImagePath';
+import SafeLink from './safe-link';
 
 const Header = () => {
   const [pathname, setPathname] = useState('/');
@@ -64,7 +64,7 @@ const Header = () => {
       <div className="container-custom">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-5 group">
+          <SafeLink href="/" className="flex items-center space-x-5 group">
             <div className="relative w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 group-hover:scale-110">
               <img
                 src={logoPath}
@@ -83,7 +83,7 @@ const Header = () => {
                 BağKent A.Ş.
               </h1>
             </div>
-          </Link>
+          </SafeLink>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
@@ -113,39 +113,39 @@ const Header = () => {
                           onMouseLeave={() => setIsKurumsalOpen(false)}
                         >
                           {link?.subLinks?.map?.((subLink, subIndex) => (
-                            <Link
+                            <SafeLink
                               key={subIndex}
                               href={subLink?.href ?? '#'}
                               className="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                             >
                               {subLink?.label}
-                            </Link>
+                            </SafeLink>
                           ))}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </>
                 ) : (
-                  <Link
+                  <SafeLink
                     href={link?.href ?? '#'}
                     className={`text-lg font-semibold transition-colors hover:text-blue-600 ${
                       shouldUseScrolledStyle ? 'text-gray-800' : 'text-white drop-shadow-md'
                     }`}
                   >
                     {link?.label}
-                  </Link>
+                  </SafeLink>
                 )}
               </div>
             ))}
           </nav>
 
           {/* CTA Button */}
-          <Link
+          <SafeLink
             href="/iletisim"
             className="hidden lg:block px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
           >
             Bize Ulaşın
-          </Link>
+          </SafeLink>
 
           {/* Mobile Menu Button */}
           <button
@@ -179,34 +179,34 @@ const Header = () => {
                         {link?.label}
                       </div>
                       {link?.subLinks?.map?.((subLink, subIndex) => (
-                        <Link
+                        <SafeLink
                           key={subIndex}
                           href={subLink?.href ?? '#'}
                           className="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors ml-4"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {subLink?.label}
-                        </Link>
+                        </SafeLink>
                       ))}
                     </>
                   ) : (
-                    <Link
+                    <SafeLink
                       href={link?.href ?? '#'}
                       className="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors font-medium"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link?.label}
-                    </Link>
+                    </SafeLink>
                   )}
                 </div>
               ))}
-              <Link
+              <SafeLink
                 href="/iletisim"
                 className="block mx-4 mt-4 px-6 py-3 bg-blue-600 text-white text-center rounded-lg font-medium hover:bg-blue-700 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Bize Ulaşın
-              </Link>
+              </SafeLink>
             </nav>
           </motion.div>
         )}
