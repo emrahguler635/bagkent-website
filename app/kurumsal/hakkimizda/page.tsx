@@ -3,8 +3,43 @@
 import { motion } from 'framer-motion';
 import { Building2, Users, Award, Target, Lightbulb, Shield } from 'lucide-react';
 import { getImagePath } from '@/lib/imagePath';
+import { useEffect } from 'react';
 
 export default function AboutPage() {
+  // Görselleri önceden yükle (preload)
+  useEffect(() => {
+    // BasePath'i algıla
+    let basePath = '';
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      if (hostname.includes('github.io')) {
+        const href = window.location.href;
+        const match = href.match(/github\.io\/([^\/\?]+)/);
+        if (match && match[1]) {
+          basePath = `/${match[1]}`;
+        } else {
+          const pathname = window.location.pathname;
+          const pathParts = pathname.split('/').filter(Boolean);
+          if (pathParts.length > 0) {
+            basePath = `/${pathParts[0]}`;
+          }
+        }
+      }
+    }
+
+    const preloadImages = [
+      `${basePath}/hakkimizda-hero.jpeg`,
+      `${basePath}/hakkimizda-team.jpeg`,
+    ];
+
+    preloadImages.forEach((src) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+    });
+  }, []);
   const values = [
     {
       icon: Shield,
@@ -44,6 +79,8 @@ export default function AboutPage() {
             src={getImagePath("/hakkimizda-hero.jpeg")}
             alt="BağKent Modern Konut Projesi"
             className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
         <div className="container-custom relative z-10">
@@ -89,8 +126,7 @@ export default function AboutPage() {
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="relative"
             >
@@ -99,6 +135,8 @@ export default function AboutPage() {
                   src={getImagePath("/hakkimizda-team.jpeg")}
                   alt="BağKent A.Ş. Modern Konut Projesi"
                   className="w-full h-full object-cover"
+                  loading="eager"
+                  fetchPriority="high"
                 />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-blue-600 text-white p-8 rounded-xl shadow-2xl">
