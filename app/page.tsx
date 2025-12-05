@@ -6,9 +6,11 @@ import FeatureCard from '@/components/feature-card';
 import { Building2, Shield, Users, Wrench, TrendingUp, HeartHandshake } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { getImagePath } from '@/lib/imagePath';
+import { useImagePath } from '@/hooks/useImagePath';
 
 export default function Home() {
+  const homepageAboutImage = useImagePath("/homepage-about.jpeg");
+  
   const projects = [
     {
       title: 'Modern Konut Kompleksi',
@@ -105,9 +107,11 @@ export default function Home() {
               className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl"
             >
               <img
-                src={getImagePath("/homepage-about.jpeg")}
+                src={homepageAboutImage}
                 alt="BağKent Modern Konut Projesi"
                 className="w-full h-full object-cover"
+                loading="eager"
+                fetchPriority="high"
               />
             </motion.div>
           </div>
