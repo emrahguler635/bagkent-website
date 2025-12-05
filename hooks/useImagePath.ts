@@ -1,19 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 /**
  * GitHub Pages için görsel path'lerini düzenler
  * basePath'i otomatik olarak ekler
  */
 export function useImagePath(src: string): string {
-  const [imagePath, setImagePath] = useState(src);
-
-  useEffect(() => {
+  // İlk render'da basePath'i hesapla (synchronous)
+  const initialPath = useMemo(() => {
     // Eğer external URL ise, olduğu gibi döndür
     if (src.startsWith('http://') || src.startsWith('https://')) {
-      setImagePath(src);
-      return;
+      return src;
     }
 
     // Client-side'da basePath'i window.location'dan çıkar
@@ -29,29 +27,60 @@ export function useImagePath(src: string): string {
 
           if (match && match[1]) {
             const repoName = match[1];
-            setImagePath(`/${repoName}${src}`);
-            return;
+            return `/${repoName}${src}`;
           }
 
           // Eğer regex çalışmazsa, pathname'den çıkar
           const pathname = window.location.pathname;
           const pathParts = pathname.split('/').filter(Boolean);
           if (pathParts.length > 0) {
-            setImagePath(`/${pathParts[0]}${src}`);
+            return `/${pathParts[0]}${src}`;
+          }
+        }
+      } catch (e) {
+        console.warn('useImagePath error:', e);
+      }
+    }
+
+    return src;
+  }, [src]);
+
+  const [imagePath, setImagePath] = useState(initialPath);
+
+  useEffect(() => {
+    // BasePath'i güncelle (location değişirse)
+    if (typeof window !== 'undefined') {
+      try {
+        const hostname = window.location.hostname;
+
+        if (hostname.includes('github.io')) {
+          const href = window.location.href;
+          const match = href.match(/github\.io\/([^\/\?]+)/);
+
+          if (match && match[1]) {
+            const repoName = match[1];
+            const newPath = `/${repoName}${src}`;
+            if (newPath !== imagePath) {
+              setImagePath(newPath);
+            }
+            return;
+          }
+
+          const pathname = window.location.pathname;
+          const pathParts = pathname.split('/').filter(Boolean);
+          if (pathParts.length > 0) {
+            const newPath = `/${pathParts[0]}${src}`;
+            if (newPath !== imagePath) {
+              setImagePath(newPath);
+            }
             return;
           }
         }
-
-        // Local development veya başka durumlar için
-        setImagePath(src);
       } catch (e) {
-        console.warn('useImagePath error:', e);
-        setImagePath(src);
+        // Hata durumunda mevcut path'i koru
       }
-    } else {
-      setImagePath(src);
     }
-  }, [src]);
+  }, [src, imagePath]);
 
   return imagePath;
 }
