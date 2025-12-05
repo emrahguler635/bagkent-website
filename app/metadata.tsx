@@ -12,9 +12,14 @@ export function FaviconUpdater() {
     if (typeof window !== 'undefined') {
       const hostname = window.location.hostname;
       // Özel domain (bagkent.com, bagkent.com.tr) kontrolü
-      const isCustomDomain = hostname === 'bagkent.com' || hostname === 'bagkent.com.tr' || 
-                            hostname.endsWith('.bagkent.com') || hostname.endsWith('.bagkent.com.tr');
+      const isCustomDomain = hostname === 'bagkent.com' || 
+                            hostname === 'bagkent.com.tr' || 
+                            hostname === 'www.bagkent.com' ||
+                            hostname === 'www.bagkent.com.tr' ||
+                            hostname.endsWith('.bagkent.com') || 
+                            hostname.endsWith('.bagkent.com.tr');
       
+      // Özel domain ise basePath boş kalır (favicon direkt root'tan yüklenecek)
       // Sadece GitHub Pages ise basePath ekle
       if (!isCustomDomain && hostname.includes('github.io')) {
         const href = window.location.href;
@@ -22,6 +27,11 @@ export function FaviconUpdater() {
         if (match && match[1]) {
           basePath = `/${match[1]}`;
         }
+      }
+      
+      // Özel domainlerde basePath boş olmalı
+      if (isCustomDomain) {
+        basePath = '';
       }
     }
 

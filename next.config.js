@@ -6,8 +6,9 @@ const nextConfig = {
   // GitHub Pages için static export, Vercel için normal build
   output: process.env.NEXT_OUTPUT_MODE === 'export' ? 'export' : undefined,
   // GitHub Pages için basePath ve assetPrefix (repo adına göre ayarlanacak)
-  basePath: process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : '',
-  assetPrefix: process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : '',
+  // Özel domain kullanıldığında (CUSTOM_DOMAIN env var varsa) basePath boş olmalı
+  basePath: process.env.CUSTOM_DOMAIN ? '' : (process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : ''),
+  assetPrefix: process.env.CUSTOM_DOMAIN ? '' : (process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}` : ''),
   experimental: {
     outputFileTracingRoot: path.join(__dirname, '../'),
   },

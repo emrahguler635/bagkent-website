@@ -9,21 +9,28 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const dynamic = "force-static";
 
+// Icon path'leri için - özel domain veya GitHub Pages otomatik algılanacak
+const getIconPath = (path: string) => {
+  // Build zamanında basePath yoksa (özel domain), direkt path döndür
+  // Client-side'da FaviconUpdater düzeltecek
+  return path;
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXTAUTH_URL || "https://bagkent.com.tr"),
   title: "BağKent A.Ş. - İnşaat ve Mimari Çözümler",
   description: "BağKent A.Ş. ile modern inşaat projeleri, mimari çözümler ve kaliteli yapılar. İstanbul'da güvenilir inşaat hizmetleri.",
   keywords: "BağKent, inşaat, mimari, yapı, konut, ticari yapı, İstanbul, Bağcılar",
   icons: {
     icon: [
-      { url: "/bagkent-logo.png", type: "image/png", sizes: "any" },
-      { url: "/bagkent-logo.png", type: "image/png", sizes: "192x192" },
-      { url: "/bagkent-logo.png", type: "image/png", sizes: "32x32" },
-      { url: "/bagkent-logo.png", type: "image/png", sizes: "16x16" },
+      { url: getIconPath("/bagkent-logo.png"), type: "image/png", sizes: "any" },
+      { url: getIconPath("/bagkent-logo.png"), type: "image/png", sizes: "192x192" },
+      { url: getIconPath("/bagkent-logo.png"), type: "image/png", sizes: "32x32" },
+      { url: getIconPath("/bagkent-logo.png"), type: "image/png", sizes: "16x16" },
     ],
-    shortcut: "/bagkent-logo.png",
+    shortcut: getIconPath("/bagkent-logo.png"),
     apple: [
-      { url: "/bagkent-logo.png", sizes: "180x180", type: "image/png" },
+      { url: getIconPath("/bagkent-logo.png"), sizes: "180x180", type: "image/png" },
     ],
   },
   openGraph: {
