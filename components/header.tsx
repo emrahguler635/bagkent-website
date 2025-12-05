@@ -47,7 +47,7 @@ const Header = () => {
           <Link href="/" className="flex items-center space-x-5 group">
             <div className="relative w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 group-hover:scale-110">
               <Image
-                src="https://cdn.abacus.ai/images/6b80fa56-8729-4a3f-a473-0e58c6d010bf.png"
+                src="/bagkent-logo.png"
                 alt="BağKent A.Ş."
                 fill
                 className="object-contain drop-shadow-2xl"
