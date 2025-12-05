@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Building2, Users, Award, Target, Lightbulb, Shield } from 'lucide-react';
-import Image from 'next/image';
+import { getImagePath } from '@/lib/imagePath';
 
 export default function AboutPage() {
   const values = [
@@ -40,12 +40,10 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <Image
-            src="/hakkimizda-hero.jpeg"
+          <img
+            src={getImagePath("/hakkimizda-hero.jpeg")}
             alt="BağKent Modern Konut Projesi"
-            fill
-            className="object-cover"
-            priority
+            className="w-full h-full object-cover"
           />
         </div>
         <div className="container-custom relative z-10">
@@ -97,11 +95,10 @@ export default function AboutPage() {
               className="relative"
             >
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/hakkimizda-team.jpeg"
+                <img
+                  src={getImagePath("/hakkimizda-team.jpeg")}
                   alt="BağKent A.Ş. Modern Konut Projesi"
-                  fill
-                  className="object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-blue-600 text-white p-8 rounded-xl shadow-2xl">
