@@ -1,11 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 
 export function FaviconUpdater() {
-  const pathname = usePathname();
-
   useEffect(() => {
     // BasePath'i bul - sadece GitHub Pages için gerekli
     let basePath = '';
@@ -69,7 +66,7 @@ export function FaviconUpdater() {
     };
 
     updateFavicon(`${basePath}/bagkent-logo.png`);
-  }, [pathname]);
+  }, []);
 
   return null;
 }
