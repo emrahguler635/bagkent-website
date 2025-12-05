@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { getImagePath } from '@/lib/imagePath';
 
 const Footer = () => {
   const currentYear = 2025;
@@ -126,19 +126,17 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center justify-start space-x-4">
                 <div className="relative w-20 h-20 bg-white rounded-lg p-2 hover:scale-105 transition-transform">
-                  <Image
-                    src="/bagkent-logo.png"
+                  <img
+                    src={getImagePath("/bagkent-logo.png")}
                     alt="BağKent Logo"
-                    fill
-                    className="object-contain"
+                    className="w-full h-full object-contain"
                   />
                 </div>
                 <div className="relative w-20 h-20 bg-white rounded-lg p-2 hover:scale-105 transition-transform">
-                  <Image
-                    src="/bagcilar-belediyesi-logo.png"
+                  <img
+                    src={getImagePath("/bagcilar-belediyesi-logo.png")}
                     alt="Bağcılar Belediyesi Logo"
-                    fill
-                    className="object-contain"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>

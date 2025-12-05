@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getImagePath } from '@/lib/imagePath';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,12 +47,10 @@ const Header = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-5 group">
             <div className="relative w-16 h-16 md:w-20 md:h-20 transition-transform duration-300 group-hover:scale-110">
-              <Image
-                src="/bagkent-logo.png"
+              <img
+                src={getImagePath("/bagkent-logo.png")}
                 alt="BağKent A.Ş."
-                fill
-                className="object-contain drop-shadow-2xl"
-                priority
+                className="object-contain drop-shadow-2xl w-full h-full"
               />
             </div>
             <div>

@@ -40,6 +40,7 @@ jobs:
           NEXT_OUTPUT_MODE: export
           NODE_ENV: production
           GITHUB_REPOSITORY: ${{ github.repository }}
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
         continue-on-error: false
 
       - name: Upload artifact

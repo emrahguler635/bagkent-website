@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { Building2, X } from 'lucide-react';
-import Image from 'next/image';
 import { useState } from 'react';
+import { getImagePath } from '@/lib/imagePath';
 
 export default function YonetimPage() {
   const [showBioModal, setShowBioModal] = useState(false);
@@ -13,12 +13,10 @@ export default function YonetimPage() {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <Image
-            src="/hakkimizda-hero.jpeg"
+          <img
+            src={getImagePath("/hakkimizda-hero.jpeg")}
             alt="BağKent Yönetim"
-            fill
-            className="object-cover"
-            priority
+            className="object-cover w-full h-full"
           />
         </div>
         <div className="container-custom relative z-10">
@@ -69,11 +67,10 @@ export default function YonetimPage() {
                   <div className="flex-shrink-0">
                     <div className="relative w-40 h-40">
                       <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
-                        <Image
-                          src="/baskan.png"
+                        <img
+                          src={getImagePath("/baskan.png")}
                           alt="Yasin YILDIZ"
-                          fill
-                          className="object-cover"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                     </div>
@@ -132,11 +129,10 @@ export default function YonetimPage() {
                   <div className="flex-shrink-0">
                     <div className="relative w-40 h-40">
                       <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
-                        <Image
-                          src="/genel-mudur.png"
+                        <img
+                          src={getImagePath("/genel-mudur.png")}
                           alt="Salih KUMBAR"
-                          fill
-                          className="object-cover"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                     </div>
@@ -189,11 +185,10 @@ export default function YonetimPage() {
               <div className="flex items-center gap-6">
                 <div className="relative w-24 h-24 flex-shrink-0">
                   <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
-                    <Image
-                      src="/baskan.png"
+                    <img
+                      src={getImagePath("/baskan.png")}
                       alt="Yasin YILDIZ"
-                      fill
-                      className="object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
@@ -276,11 +271,10 @@ export default function YonetimPage() {
               <div className="flex items-center gap-6">
                 <div className="relative w-24 h-24 flex-shrink-0">
                   <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
-                    <Image
-                      src="/genel-mudur.png"
+                    <img
+                      src={getImagePath("/genel-mudur.png")}
                       alt="Salih KUMBAR"
-                      fill
-                      className="object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
