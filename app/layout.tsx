@@ -48,11 +48,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" suppressHydrationWarning>
-      <head>
-        <link rel="icon" type="image/png" href="/bagkent-logo.png" />
-        <link rel="shortcut icon" type="image/png" href="/bagkent-logo.png" />
-        <link rel="apple-touch-icon" href="/bagkent-logo.png" />
-      </head>
       <body className={inter.className} suppressHydrationWarning>
         <FaviconUpdater />
         <Header />
