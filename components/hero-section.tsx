@@ -13,18 +13,18 @@ const HeroSection = () => {
   // Video dosyası varsa buraya ekleyin (public klasöründen)
   // Örnek: '/hero-video.mp4'
   // Video yoksa null yapın veya '' yapın
-  const heroVideo = '/hero-video.mp4'; // Video dosyası varsa buraya dosya adını yazın, yoksa null yapın
+  const heroVideo = null; // Video dosyası varsa buraya dosya adını yazın, yoksa null yapın (şu an slider aktif)
   const heroVideoPath = heroVideo ? useImagePath(heroVideo) : null;
   const heroVideoPoster = useImagePath('/hero-bg-2.jpg'); // Video yüklenirken gösterilecek görsel
 
   const slides = [
     {
-      src: 'https://www.imtilak.net/storage/posts/image_1608792757_xzMoEGJbDHRYRflVyv2tzGYLCy6DhNSlaoxhOUM6.jpeg',
-      alt: 'Bağcılar İstanbul Genel Görünüm',
+      src: useImagePath('/hero-bg-2.jpg'),
+      alt: 'BağKent A.Ş. Proje Alanı',
     },
     {
-      src: '/hero-bg-2.jpg',
-      alt: 'BağKent A.Ş. Proje Alanı',
+      src: useImagePath('/DJI_0609.JPG'),
+      alt: 'Bağcılar İstanbul Genel Görünüm',
     },
   ];
 
@@ -86,9 +86,7 @@ const HeroSection = () => {
                 className="relative w-full h-full"
               >
                 <img
-                  src={slides[currentSlide].src.startsWith('http') 
-                    ? slides[currentSlide].src 
-                    : useImagePath(slides[currentSlide].src)}
+                  src={slides[currentSlide].src}
                   alt={slides[currentSlide].alt}
                   className="w-full h-full object-cover"
                 />
