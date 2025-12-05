@@ -101,8 +101,7 @@ export default function Home() {
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl"
             >
