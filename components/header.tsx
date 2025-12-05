@@ -2,20 +2,33 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useImagePath } from '@/hooks/useImagePath';
 
 const Header = () => {
-  const pathname = usePathname();
+  const [pathname, setPathname] = useState('/');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isKurumsalOpen, setIsKurumsalOpen] = useState(false);
   const logoPath = useImagePath("/bagkent-logo.png");
   
+  // Pathname'i client-side'da window.location'dan al (static export uyumluluğu için)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPathname(window.location.pathname);
+      
+      // Pathname değişikliklerini dinle
+      const handleLocationChange = () => {
+        setPathname(window.location.pathname);
+      };
+      window.addEventListener('popstate', handleLocationChange);
+      return () => window.removeEventListener('popstate', handleLocationChange);
+    }
+  }, []);
+  
   // Ana sayfa dışında her zaman scrolled gibi davran
-  const isHomePage = pathname === '/';
+  const isHomePage = pathname === '/' || pathname === '/bagkent-website/' || pathname.endsWith('/bagkent-website');
   const shouldUseScrolledStyle = isScrolled || !isHomePage;
 
   useEffect(() => {
