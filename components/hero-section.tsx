@@ -17,13 +17,17 @@ const HeroSection = () => {
   const heroVideoPath = heroVideo ? useImagePath(heroVideo) : null;
   const heroVideoPoster = useImagePath('/hero-bg-2.jpg'); // Video yüklenirken gösterilecek görsel
 
+  // Görsel path'leri hook ile al
+  const slide1Image = useImagePath('/hero-bg-2.jpg');
+  const slide2Image = useImagePath('/DJI_0609.JPG');
+
   const slides = [
     {
-      src: useImagePath('/hero-bg-2.jpg'),
+      src: slide1Image,
       alt: 'BağKent A.Ş. Proje Alanı',
     },
     {
-      src: useImagePath('/DJI_0609.JPG'),
+      src: slide2Image,
       alt: 'Bağcılar İstanbul Genel Görünüm',
     },
   ];
