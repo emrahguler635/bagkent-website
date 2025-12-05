@@ -4,10 +4,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Building2, Users, Award } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { getImagePath } from '@/lib/imagePath';
+import { useImagePath } from '@/hooks/useImagePath';
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  
+  // Video dosyası varsa buraya ekleyin (public klasöründen)
+  // Örnek: '/hero-video.mp4'
+  // Video yoksa null yapın veya '' yapın
+  const heroVideo = '/hero-video.mp4'; // Video dosyası varsa buraya dosya adını yazın, yoksa null yapın
+  const heroVideoPath = heroVideo ? useImagePath(heroVideo) : null;
+  const heroVideoPoster = useImagePath('/hero-bg-2.jpg'); // Video yüklenirken gösterilecek görsel
 
   const slides = [
     {
@@ -20,52 +28,91 @@ const HeroSection = () => {
     },
   ];
 
-  // Auto-advance slides every 10 seconds
+  // Auto-advance slides every 10 seconds (video yoksa)
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 10000);
+    if (!heroVideo) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 10000);
 
-    return () => clearInterval(timer);
-  }, [slides.length]);
+      return () => clearInterval(timer);
+    }
+  }, [slides.length, heroVideo]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image Slideshow */}
+      {/* Background Video or Image Slideshow */}
       <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="relative w-full h-full"
-          >
-            <img
-              src={getImagePath(slides[currentSlide].src)}
-              alt={slides[currentSlide].alt}
+        {heroVideo && heroVideoPath ? (
+          // Video Background
+          <div className="relative w-full h-full">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
               className="w-full h-full object-cover"
-            />
+              poster={heroVideoPoster}
+              onLoadedData={() => setVideoLoaded(true)}
+            >
+              <source src={heroVideoPath} type="video/mp4" />
+              {/* Fallback: Video yüklenemezse görselleri göster */}
+              <img
+                src={heroVideoPoster}
+                alt="BağKent A.Ş. Proje Alanı"
+                className="w-full h-full object-cover"
+              />
+            </video>
+            {/* Video yüklenene kadar poster göster */}
+            {!videoLoaded && (
+              <img
+                src={heroVideoPoster}
+                alt="BağKent A.Ş."
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-900/80 to-blue-800/70" />
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ) : (
+          // Image Slideshow (Video yoksa)
+          <>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+                className="relative w-full h-full"
+              >
+                <img
+                  src={slides[currentSlide].src.startsWith('http') 
+                    ? slides[currentSlide].src 
+                    : useImagePath(slides[currentSlide].src)}
+                  alt={slides[currentSlide].alt}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-900/80 to-blue-800/70" />
+              </motion.div>
+            </AnimatePresence>
 
-        {/* Slide Indicators */}
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 flex gap-3">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide
-                  ? 'bg-white w-8'
-                  : 'bg-white/50 hover:bg-white/75'
-              }`}
-              aria-label={`Slayt ${index + 1}'e git`}
-            />
-          ))}
-        </div>
+            {/* Slide Indicators */}
+            <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 flex gap-3">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === currentSlide
+                      ? 'bg-white w-8'
+                      : 'bg-white/50 hover:bg-white/75'
+                  }`}
+                  aria-label={`Slayt ${index + 1}'e git`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Content */}
