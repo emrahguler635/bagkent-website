@@ -1,23 +1,14 @@
 @echo off
-echo ========================================
-echo HIZLI DEPLOY
-echo ========================================
-echo.
-
-REM Proje klasörüne git
+chcp 65001 >nul
 cd /d "%~dp0"
 
-echo Değişiklikler GitHub'a gönderiliyor...
+echo Deploy başlatılıyor...
 
 call git add -A
-call git commit -m "Site güncellemesi - %date% %time%"
+call git commit -m "Site güncellemesi - %date:~-4,4%-%date:~-7,2%-%date:~-10,2% %time:~0,8%"
 call git push
 
 echo.
-echo ========================================
-echo Tamamlandı!
+echo ✓ Deploy tamamlandı!
 echo GitHub Actions deploy başlatıyor...
-echo ========================================
-timeout /t 3
-exit
-
+timeout /t 2 >nul
