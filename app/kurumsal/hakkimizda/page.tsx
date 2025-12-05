@@ -11,13 +11,13 @@ export default function AboutPage() {
 
   // Görselleri önceden yükle (preload)
   useEffect(() => {
-    if (heroImagePath && teamImagePath) {
+    if (heroImagePath && teamImagePath && typeof window !== 'undefined') {
       const preloadImages = [heroImagePath, teamImagePath];
 
       preloadImages.forEach((src) => {
         // Daha önce eklenmişse tekrar ekleme
         const existingLink = document.querySelector(`link[href="${src}"]`);
-        if (!existingLink) {
+        if (!existingLink && src && src !== '/hakkimizda-hero.jpeg' && src !== '/hakkimizda-team.jpeg') {
           const link = document.createElement('link');
           link.rel = 'preload';
           link.as = 'image';
