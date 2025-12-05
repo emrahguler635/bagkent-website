@@ -9,12 +9,12 @@ export default function ProjectsPage() {
   // Proje görselleri için path'ler
   const project1Image = useImagePath('/homepage-about.jpeg');
   const project2Image = useImagePath('/hero-bg-2.jpg');
-  const project3Image = useImagePath('/hakkimizda-hero.jpeg');
+  const project3Image = useImagePath('/kultur-tesis.jpg'); // Kitap şeklinde kütüphane - yeni görsel
   const project4Image = useImagePath('/hakkimizda-team.jpeg');
   const project5Image = useImagePath('/12.jpeg');
-  const project6Image = useImagePath('/download.jpeg');
+  const project6Image = useImagePath('/saglik-tesis.jpg'); // Bağcılar Hastanesi - yeni görsel
   const project7Image = useImagePath('/image.png');
-  const project8Image = useImagePath('/download (1).png');
+  const project8Image = useImagePath('/enerji-verimliligi.jpg'); // Güneş panelleri - yeni görsel
   const project9Image = useImagePath('/DJI_0609.JPG');
 
   const projects = [
@@ -32,7 +32,7 @@ export default function ProjectsPage() {
     },
     {
       title: 'Bağcılar Kültür ve Sosyal Tesis Projeleri',
-      description: 'Bağcılar\'da kültürel ve sosyal yaşamı destekleyen modern tesisler inşa edilmektedir. Kültür merkezleri, gençlik merkezleri, kütüphaneler ve toplum merkezleri ile vatandaşlarımızın sosyal ihtiyaçlarını karşılıyoruz. Sanat etkinlikleri, eğitim programları ve sosyal aktiviteler için uygun mekanlar oluşturuyoruz.',
+      description: 'Bağcılar\'da kültürel ve sosyal yaşamı destekleyen modern tesisler inşa edilmektedir. Kültür merkezleri, gençlik merkezleri, kütüphaneler ve toplum merkezleri ile vatandaşlarımızın sosyal ihtiyaçlarını karşılıyoruz. Sanat etkinlikleri, eğitim programları ve sosyal aktiviteler için uygun mekanlar oluşturuyoruz. Modern mimari tasarımlı kitap şeklinde kütüphane binası gibi özgün projelerle şehrimize değer katıyoruz.',
       image: project3Image,
       category: 'Ticari',
     },
@@ -50,7 +50,7 @@ export default function ProjectsPage() {
     },
     {
       title: 'Bağcılar Sağlık ve Eğitim Tesisleri',
-      description: 'Bağcılar\'ın sağlık ve eğitim altyapısını güçlendiren modern tesis projeleri hayata geçirilmektedir. Aile sağlık merkezleri, sağlık ocakları, modern okul binaları ve eğitim tesisleri ile vatandaşlarımıza daha iyi hizmet sunuyoruz. Çocuklarımızın ve gençlerimizin kaliteli eğitim alması, tüm vatandaşlarımızın sağlık hizmetlerine kolay erişmesi için çalışıyoruz.',
+      description: 'Bağcılar\'ın sağlık ve eğitim altyapısını güçlendiren modern tesis projeleri hayata geçirilmektedir. Bağcılar Hastanesi gibi büyük ölçekli sağlık tesisleri, aile sağlık merkezleri, sağlık ocakları, modern okul binaları ve eğitim tesisleri ile vatandaşlarımıza daha iyi hizmet sunuyoruz. Çocuklarımızın ve gençlerimizin kaliteli eğitim alması, tüm vatandaşlarımızın sağlık hizmetlerine kolay erişmesi için çalışıyoruz.',
       image: project6Image,
       category: 'Ticari',
     },
@@ -62,7 +62,7 @@ export default function ProjectsPage() {
     },
     {
       title: 'Bağcılar Enerji Verimliliği ve Akıllı Şehir',
-      description: 'Bağcılar\'da enerji verimliliği ve çevre dostu uygulamalar yaygınlaştırılmaktadır. Belediye binalarında LED aydınlatma sistemleri, güneş enerjisi panelleri ve akıllı enerji yönetim sistemleri kurulmaktadır. Kamu alanlarında enerji tasarrufu sağlayan teknolojiler ile hem çevreyi koruyor hem de bütçe tasarrufu sağlıyoruz.',
+      description: 'Bağcılar\'da enerji verimliliği ve çevre dostu uygulamalar yaygınlaştırılmaktadır. Belediye binalarında ve kamu tesislerinde LED aydınlatma sistemleri, çatılarda kurulan güneş enerjisi panelleri ve akıllı enerji yönetim sistemleri ile sürdürülebilir bir şehir yaratıyoruz. Kamu alanlarında enerji tasarrufu sağlayan teknolojiler ile hem çevreyi koruyor hem de bütçe tasarrufu sağlıyoruz. Yenilenebilir enerji kaynaklarının kullanımı ile karbon ayak izimizi azaltıyoruz.',
       image: project8Image,
       category: 'Altyapı',
     },
