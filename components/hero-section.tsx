@@ -20,11 +20,11 @@ const HeroSection = () => {
     },
   ];
 
-  // Auto-advance slides every 5 seconds
+  // Auto-advance slides every 10 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(timer);
   }, [slides.length]);
