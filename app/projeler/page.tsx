@@ -8,12 +8,12 @@ import { useImagePath } from '@/hooks/useImagePath';
 export default function ProjectsPage() {
   // Proje görselleri için path'ler
   const project1Image = useImagePath('/homepage-about.jpeg');
-  const project2Image = useImagePath('/hero-bg-2.jpg');
+  const project2Image = useImagePath('/park-yesil-alan.jpg'); // Park ve Yeşil Alan - yeni görsel
   const project3Image = useImagePath('/kultur-tesis.jpg'); // Kitap şeklinde kütüphane - yeni görsel
-  const project4Image = useImagePath('/hakkimizda-team.jpeg');
-  const project5Image = useImagePath('/12.jpeg');
+  const project4Image = useImagePath('/spor-tesisleri.jpg'); // Modern Spor Tesisleri - yeni görsel
+  const project5Image = useImagePath('/altyapi-modernizasyon.jpg'); // Altyapı Modernizasyon - yeni görsel
   const project6Image = useImagePath('/saglik-tesis.jpg'); // Bağcılar Hastanesi - yeni görsel
-  const project7Image = useImagePath('/image.png');
+  const project7Image = useImagePath('/3d-dijital-sehir.jpg'); // 3D Dijital Şehir - yeni görsel
   const project8Image = useImagePath('/enerji-verimliligi.jpg'); // Güneş panelleri - yeni görsel
   const project9Image = useImagePath('/DJI_0609.JPG');
 
