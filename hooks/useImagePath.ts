@@ -27,14 +27,18 @@ export function useImagePath(src: string): string {
 
           if (match && match[1]) {
             const repoName = match[1];
-            return `/${repoName}${src}`;
+            const fullPath = `/${repoName}${src}`;
+            console.log('useImagePath:', src, '->', fullPath);
+            return fullPath;
           }
 
           // Eğer regex çalışmazsa, pathname'den çıkar
           const pathname = window.location.pathname;
           const pathParts = pathname.split('/').filter(Boolean);
           if (pathParts.length > 0) {
-            return `/${pathParts[0]}${src}`;
+            const fullPath = `/${pathParts[0]}${src}`;
+            console.log('useImagePath (pathname):', src, '->', fullPath);
+            return fullPath;
           }
         }
       } catch (e) {
