@@ -7,57 +7,57 @@ import { Building2, Home, Store, Hammer } from 'lucide-react';
 export default function ProjectsPage() {
   const projects = [
     {
-      title: 'Modern Konut Kompleksi - Küçükçekmece',
-      description: 'İstanbul Küçükçekmece bölgesinde modern mimari anlayışla tasarlanmış 200 daireli lüks konut projesi. Sosyal donatı alanları, yeşil alanlar ve kapalı otopark ile.',
+      title: 'Bağcılar Kentsel Dönüşüm Projeleri',
+      description: 'Bağcılar ilçesinde modern ve güvenli yaşam alanları oluşturmak amacıyla gerçekleştirilen kentsel dönüşüm projeleri. Deprem güvenliği ve modern mimari standartları ile.',
       image: 'https://damasturk.com/uploads/2023/53cc16f2ed70640c890660c01598af66e286.png',
       category: 'Konut',
     },
     {
-      title: 'Vakko Ofis Binası',
-      description: 'Modern mimari tasarımla İstanbul\'un en prestijli ofis binalarından biri. Akıllı bina sistemleri ve enerji verimli tasarımıyla dikkat çeken ticari proje.',
+      title: 'Bağcılar Park ve Yeşil Alan Projeleri',
+      description: 'İlçe genelinde yaşam kalitesini artırmak amacıyla yapılan park ve yeşil alan düzenlemeleri. Çocuk oyun alanları, yürüyüş yolları ve dinlenme alanları ile.',
+      image: 'https://www.imtilak.net/storage/posts/image_1608792757_xzMoEGJbDHRYRflVyv2tzGYLCy6DhNSlaoxhOUM6.jpeg',
+      category: 'Altyapı',
+    },
+    {
+      title: 'Bağcılar Sosyal Tesis Projeleri',
+      description: 'Vatandaşların sosyal ve kültürel ihtiyaçlarını karşılamak amacıyla inşa edilen kültür merkezleri, gençlik merkezleri ve sosyal tesis projeleri.',
       image: 'https://www.e-architect.com/wp-content/uploads/2023/09/istanbul-vakko-offices-by-hq-architects-h140923-h2.png',
       category: 'Ticari',
     },
     {
-      title: 'Payallar Rezidans Kompleksi',
-      description: 'Doğa ile iç içe, modern yaşam alanları sunan lüks rezidans projesi. Geniş balkonlar, manzara ve kaliteli malzeme kullanımı ile öne çıkan konut projesi.',
-      image: 'https://obj.hayatestate.com/storage/real-estates/108/108700/00g-1.jpg',
-      category: 'Rezidans',
-    },
-    {
-      title: 'Terra İstanbul Apartmanları',
-      description: 'İstanbul\'da konumlanmış, çarpıcı mimari tasarıma sahip apartman kompleksi. Modern yaşam alanları ve güvenli yaşam konsepti ile tasarlanmıştır.',
+      title: 'Bağcılar Spor Tesisleri',
+      description: 'Gençlere ve tüm vatandaşlara modern spor imkanları sunan kapalı spor salonları, futbol sahaları ve açık spor alanları projeleri.',
       image: 'https://terrarealestate.com/img/803/-5be5425d5e062.jpg',
-      category: 'Konut',
+      category: 'Altyapı',
     },
     {
-      title: 'Vakko Fashion Center',
-      description: 'Modern ticari yapı tasarımının en iyi örneklerinden. Alışveriş merkezi ve ofis alanlarını bir araya getiren çok fonksiyonlu bina projesi.',
-      image: 'https://images.divisare.com//image/upload/c_fit,f_jpg,q_80,w_1200/v1/project_images/1883950/VAKKO_05_Credit-Iwan-Baan.jpg',
-      category: 'Ticari',
-    },
-    {
-      title: 'Alanya Mound House',
-      description: 'Alanya\'da modern mimari detaylarla tasarlanmış özel villa projesi. Deniz manzarası ve çağdaş tasarım anlayışı ile dikkat çeker.',
-      image: 'https://amazingarchitecture.com/storage/4182/1-mound_house_alanya_ware_studio.jpg',
-      category: 'Villa',
-    },
-    {
-      title: 'Quartz Plaza İstanbul',
-      description: 'İstanbul\'un modern ofis binalarından biri. Cam cephe tasarımı ve sürdürülebilir mimari yaklaşımıyla sektörde örnek gösterilen proje.',
-      image: 'https://www.e-architect.com/wp-content/uploads/2025/09/quartz-plaza-istanbul-turkey-office-building-s230925-c-1.webp',
-      category: 'Ticari',
-    },
-    {
-      title: 'İnşaat Altyapı Projeleri',
-      description: 'Türkiye genelinde gerçekleştirdiğimiz altyapı ve sanayi projeleri. Yüksek kalite standartları ve modern ekipmanlarla tamamlanan projeler.',
+      title: 'Bağcılar Altyapı İyileştirme Projeleri',
+      description: 'Yol, su, kanalizasyon ve aydınlatma sistemlerinin modernize edilmesi. İlçe genelinde gerçekleştirilen altyapı iyileştirme çalışmaları.',
       image: 'https://static.birgun.net/resim/haber/2025/11/18/more-than-just-exploitation.jpg',
       category: 'Altyapı',
     },
     {
-      title: 'Ticari ve Kurumsal Yapılar',
-      description: 'Türk inşaat sektöründe yüksek kaliteli ticari yapı projeleri. Modern tasarım ve fonksiyonel alan kullanımı ile öne çıkan projelerimiz.',
+      title: 'Bağcılar Sağlık ve Eğitim Tesisleri',
+      description: 'Modern sağlık merkezleri, okul binaları ve eğitim tesislerinin inşası. Bağcılar\'ın sağlık ve eğitim altyapısını güçlendiren projeler.',
       image: 'https://cdnuploads.aa.com.tr/uploads/Contents/2021/03/18/thumbs_b_c_e0cac4bf5a4b81fdcbc65613d83348c7.jpg?v=160553',
+      category: 'Ticari',
+    },
+    {
+      title: 'Bağcılar 3D Dijital Şehir İkizi Projesi',
+      description: 'Yapay zeka teknolojileri kullanılarak Bağcılar\'ın dijital ikizinin oluşturulması. Afet yönetimi ve kentsel planlama için Coğrafi Bilgi Sistemi tabanlı proje.',
+      image: 'https://www.e-architect.com/wp-content/uploads/2025/09/quartz-plaza-istanbul-turkey-office-building-s230925-c-1.webp',
+      category: 'Altyapı',
+    },
+    {
+      title: 'Bağcılar Enerji Verimliliği Projeleri',
+      description: 'Belediye binaları ve kamu alanlarında enerji verimliliği sağlayan projeler. LED aydınlatma sistemleri ve akıllı şehir uygulamaları.',
+      image: 'https://images.divisare.com//image/upload/c_fit,f_jpg,q_80,w_1200/v1/project_images/1883950/VAKKO_05_Credit-Iwan-Baan.jpg',
+      category: 'Altyapı',
+    },
+    {
+      title: 'Bağcılar YTÜ İş Birliği Projeleri',
+      description: 'Yıldız Teknik Üniversitesi ile iş birliği protokolü kapsamında toplumsal fayda odaklı bilimsel araştırma ve kültürel miras çalışmaları.',
+      image: 'https://obj.hayatestate.com/storage/real-estates/108/108700/00g-1.jpg',
       category: 'Kurumsal',
     },
   ];
@@ -66,7 +66,7 @@ export default function ProjectsPage() {
     { name: 'Tümü', icon: Building2, count: projects.length },
     { name: 'Konut', icon: Home, count: projects.filter(p => p?.category === 'Konut').length },
     { name: 'Ticari', icon: Store, count: projects.filter(p => p?.category === 'Ticari').length },
-    { name: 'Altyapı', icon: Hammer, count: projects.filter(p => ['Altyapı', 'Kurumsal', 'Rezidans', 'Villa'].includes(p?.category ?? '')).length },
+    { name: 'Altyapı', icon: Hammer, count: projects.filter(p => ['Altyapı', 'Kurumsal'].includes(p?.category ?? '')).length },
   ];
 
   return (
