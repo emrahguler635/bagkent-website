@@ -47,18 +47,19 @@ export default function SafeLink({ href, children, className, onClick, ...props 
             // Path'i normalize et - başındaki ve sonundaki slash'ları temizle
             let cleanPath = path.trim();
             
-            // Path zaten basePath içeriyorsa, sadece basePath'ten sonrasını al
-            if (cleanPath.startsWith(basePath)) {
+            // Path zaten basePath içeriyorsa (tam başında), sadece basePath'ten sonrasını al
+            // Örnek: /bagkent-website/projeler -> projeler
+            if (cleanPath.startsWith(basePath + '/') || cleanPath === basePath) {
               cleanPath = cleanPath.substring(basePath.length);
             }
             
             // Başındaki slash'ı kaldır (eklerken ekleyeceğiz)
-            if (cleanPath.startsWith('/')) {
+            while (cleanPath.startsWith('/')) {
               cleanPath = cleanPath.substring(1);
             }
             
-            // Eğer cleanPath boşsa veya sadece '/' ise, basePath + '/' döndür
-            if (!cleanPath || cleanPath === '' || cleanPath === '/') {
+            // Eğer cleanPath boşsa, basePath + '/' döndür (ana sayfa)
+            if (!cleanPath || cleanPath === '') {
               return `${basePath}/`;
             }
             
