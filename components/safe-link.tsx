@@ -44,25 +44,27 @@ export default function SafeLink({ href, children, className, onClick, ...props 
           if (match && match[1]) {
             const basePath = `/${match[1]}`;
             
-            // Path'den önce basePath varsa çıkar (zaten ekli olabilir)
-            let cleanPath = path;
+            // Path'i normalize et - başındaki ve sonundaki slash'ları temizle
+            let cleanPath = path.trim();
+            
+            // Path zaten basePath içeriyorsa, sadece basePath'ten sonrasını al
             if (cleanPath.startsWith(basePath)) {
               cleanPath = cleanPath.substring(basePath.length);
             }
             
-            // Path zaten basePath ile başlıyorsa ve mevcut pathname'de de varsa, sadece path'i kullan
-            if (currentPathname.includes(basePath) && path.startsWith(basePath)) {
-              cleanPath = path.substring(basePath.length);
+            // Başındaki slash'ı kaldır (eklerken ekleyeceğiz)
+            if (cleanPath.startsWith('/')) {
+              cleanPath = cleanPath.substring(1);
             }
             
             // Eğer cleanPath boşsa veya sadece '/' ise, basePath + '/' döndür
-            if (!cleanPath || cleanPath === '/') {
+            if (!cleanPath || cleanPath === '' || cleanPath === '/') {
               return `${basePath}/`;
             }
             
             // Trailing slash ekle (Next.js static export için)
-            const fullPath = `${basePath}${cleanPath.startsWith('/') ? cleanPath : '/' + cleanPath}`;
-            return fullPath.endsWith('/') ? fullPath : `${fullPath}/`;
+            const finalPath = cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
+            return `${basePath}/${finalPath}`;
           }
         }
         
