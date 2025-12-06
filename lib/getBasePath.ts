@@ -28,17 +28,19 @@ export function getBasePath(): string {
     // GitHub Pages için basePath bul
     if (hostname.includes('github.io')) {
       const fullUrl = window.location.href;
+      const pathname = window.location.pathname;
       
-      // Yöntem 1: Full URL'den regex ile çıkar
+      // Yöntem 1: Full URL'den regex ile çıkar (EN GARANTİLİ)
+      // https://emrahguler635.github.io/bagkent-website/ formatından bagkent-website'yi al
       const urlMatch = fullUrl.match(/https?:\/\/[^\/]+\.github\.io\/([^\/\?]+)/);
       if (urlMatch && urlMatch[1]) {
         return `/${urlMatch[1]}`;
       }
 
       // Yöntem 2: Pathname'den çıkar
-      const pathname = window.location.pathname;
+      // /bagkent-website/ veya /bagkent-website/projeler/ formatından bagkent-website'yi al
       const pathParts = pathname.split('/').filter(Boolean);
-      if (pathParts.length > 0) {
+      if (pathParts.length > 0 && pathParts[0] !== '') {
         return `/${pathParts[0]}`;
       }
     }
