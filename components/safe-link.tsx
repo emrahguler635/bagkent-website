@@ -22,7 +22,7 @@ export default function SafeLink({ href, children, className, onClick, ...props 
       return href;
     }
 
-    // BasePath'i al
+    // BasePath'i al (GitHub Pages için otomatik eklenir)
     const basePath = getBasePath();
     
     // Path'i normalize et
@@ -46,7 +46,7 @@ export default function SafeLink({ href, children, className, onClick, ...props 
     // Trailing slash ekle (Next.js static export için)
     const finalPath = cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
     
-    // BasePath varsa ekle, yoksa direkt path'i döndür
+    // BasePath varsa mutlaka ekle, yoksa direkt path'i döndür
     return basePath ? `${basePath}/${finalPath}` : `/${finalPath}`;
   }, [href]);
 
