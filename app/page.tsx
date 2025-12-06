@@ -199,6 +199,15 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto"
           >
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-lg md:text-xl text-blue-200 font-medium mb-4 tracking-wide"
+            >
+              BağKent Sizinle Güzel
+            </motion.p>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Hayalinizdeki Projeyi Birlikte Gerçekleştirelim
             </h2>
