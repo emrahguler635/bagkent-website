@@ -132,7 +132,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
             >
-              Neden BağKent?
+              Neden BağKent
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
