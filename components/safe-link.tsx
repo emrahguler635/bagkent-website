@@ -25,6 +25,8 @@ export default function SafeLink({ href, children, className, onClick, ...props 
     if (typeof window !== 'undefined') {
       try {
         const hostname = window.location.hostname;
+        const pathname = window.location.pathname;
+        const fullUrl = window.location.href;
         
         // Özel domain (bagkent.com, bagkent.com.tr) kontrolü - basePath gerekmez
         const isCustomDomain = 
@@ -37,35 +39,33 @@ export default function SafeLink({ href, children, className, onClick, ...props 
 
         // Özel domainlerde basePath ekleme
         if (isCustomDomain) {
-          // Path'i normalize et
           let cleanPath = href.trim();
           if (!cleanPath.startsWith('/')) {
             cleanPath = '/' + cleanPath;
           }
-          return cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
+          return cleanPath === '/' ? '/' : (cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`);
         }
 
         // GitHub Pages için basePath ekle
         if (hostname.includes('github.io')) {
-          // Repository adını bul
+          // Repository adını bul - en garantili yöntem
           let basePath = '';
           
-          // Yöntem 1: URL'den regex ile çıkar
-          const hrefMatch = window.location.href.match(/github\.io\/([^\/\?]+)/);
+          // Yöntem 1: URL'den regex ile çıkar (en güvenilir)
+          const hrefMatch = fullUrl.match(/https?:\/\/[^\/]+\.github\.io\/([^\/\?]+)/);
           if (hrefMatch && hrefMatch[1]) {
             basePath = `/${hrefMatch[1]}`;
           } else {
             // Yöntem 2: Pathname'den çıkar
-            const pathname = window.location.pathname;
             const pathParts = pathname.split('/').filter(Boolean);
-            if (pathParts.length > 0) {
+            if (pathParts.length > 0 && pathParts[0] !== '') {
               basePath = `/${pathParts[0]}`;
             }
           }
 
-          // BasePath bulunduysa ekle
-          if (basePath) {
-            // Path'i normalize et
+          // BasePath bulunduysa mutlaka ekle
+          if (basePath && basePath !== '/') {
+            // Path'i normalize et - başındaki slash'ları temizle
             let cleanPath = href.trim();
             
             // Path zaten basePath içeriyorsa çıkar
@@ -79,7 +79,7 @@ export default function SafeLink({ href, children, className, onClick, ...props 
             }
             
             // Ana sayfa için
-            if (!cleanPath || cleanPath === '') {
+            if (!cleanPath || cleanPath === '' || cleanPath === '/') {
               return `${basePath}/`;
             }
             
@@ -89,12 +89,12 @@ export default function SafeLink({ href, children, className, onClick, ...props 
           }
         }
 
-        // Local development veya basePath bulunamadı
+        // Local development veya basePath bulunamadı - trailing slash ekle
         let cleanPath = href.trim();
         if (!cleanPath.startsWith('/')) {
           cleanPath = '/' + cleanPath;
         }
-        return cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
+        return cleanPath === '/' ? '/' : (cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`);
       } catch (e) {
         console.warn('SafeLink error:', e);
       }
@@ -105,7 +105,7 @@ export default function SafeLink({ href, children, className, onClick, ...props 
     if (!cleanPath.startsWith('/')) {
       cleanPath = '/' + cleanPath;
     }
-    return cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
+    return cleanPath === '/' ? '/' : (cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`);
   }, [href]);
 
   // External URL'ler için normal <a> tag kullan
