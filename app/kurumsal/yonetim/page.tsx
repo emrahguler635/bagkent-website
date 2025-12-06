@@ -3,20 +3,28 @@
 import { motion } from 'framer-motion';
 import { Building2, X } from 'lucide-react';
 import { useState } from 'react';
-import { getImagePath } from '@/lib/imagePath';
+import { useImagePath } from '@/hooks/useImagePath';
 
 export default function YonetimPage() {
   const [showBioModal, setShowBioModal] = useState(false);
   const [showGenelMudurBioModal, setShowGenelMudurBioModal] = useState(false);
+  
+  // Görsel path'leri hook ile al
+  const hakkimizdaHeroPath = useImagePath("/hakkimizda-hero.jpeg");
+  const baskanImagePath = useImagePath("/baskan.png");
+  const genelMudurImagePath = useImagePath("/genel-mudur.png");
+  
   return (
     <div className="pt-20">
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-r from-blue-900 to-blue-700 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img
-            src={getImagePath("/hakkimizda-hero.jpeg")}
+            src={hakkimizdaHeroPath}
             alt="BağKent Yönetim"
             className="object-cover w-full h-full"
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
         <div className="container-custom relative z-10">
@@ -68,9 +76,11 @@ export default function YonetimPage() {
                     <div className="relative w-40 h-40">
                       <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
                         <img
-                          src={getImagePath("/baskan.png")}
+                          src={baskanImagePath}
                           alt="Yasin YILDIZ"
                           className="w-full h-full object-cover"
+                          loading="eager"
+                          fetchPriority="high"
                         />
                       </div>
                     </div>
@@ -130,9 +140,11 @@ export default function YonetimPage() {
                     <div className="relative w-40 h-40">
                       <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
                         <img
-                          src={getImagePath("/genel-mudur.png")}
+                          src={genelMudurImagePath}
                           alt="Salih KUMBAR"
                           className="w-full h-full object-cover"
+                          loading="eager"
+                          fetchPriority="high"
                         />
                       </div>
                     </div>
@@ -186,9 +198,11 @@ export default function YonetimPage() {
                 <div className="relative w-24 h-24 flex-shrink-0">
                   <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
                     <img
-                      src={getImagePath("/baskan.png")}
+                      src={baskanImagePath}
                       alt="Yasin YILDIZ"
                       className="w-full h-full object-cover"
+                      loading="eager"
+                      fetchPriority="high"
                     />
                   </div>
                 </div>
@@ -272,9 +286,11 @@ export default function YonetimPage() {
                 <div className="relative w-24 h-24 flex-shrink-0">
                   <div className="absolute inset-0 rounded-full border-4 border-white shadow-xl overflow-hidden">
                     <img
-                      src={getImagePath("/genel-mudur.png")}
+                      src={genelMudurImagePath}
                       alt="Salih KUMBAR"
                       className="w-full h-full object-cover"
+                      loading="eager"
+                      fetchPriority="high"
                     />
                   </div>
                 </div>
