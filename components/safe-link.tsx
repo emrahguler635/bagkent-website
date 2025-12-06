@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 interface SafeLinkProps {
   href: string;
@@ -15,17 +15,16 @@ interface SafeLinkProps {
  * basePath'i otomatik olarak ekler
  */
 export default function SafeLink({ href, children, className, onClick, ...props }: SafeLinkProps) {
-  const getFullPath = (path: string) => {
+  const fullPath = useMemo(() => {
     // Eğer external URL ise, olduğu gibi döndür
-    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('mailto:') || path.startsWith('tel:')) {
-      return path;
+    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+      return href;
     }
 
     // Client-side'da basePath'i window.location'dan çıkar
     if (typeof window !== 'undefined') {
       try {
         const hostname = window.location.hostname;
-        const currentPathname = window.location.pathname;
         
         // Özel domain (bagkent.com, bagkent.com.tr) kontrolü - basePath gerekmez
         const isCustomDomain = 
@@ -36,53 +35,78 @@ export default function SafeLink({ href, children, className, onClick, ...props 
           hostname.endsWith('.bagkent.com') || 
           hostname.endsWith('.bagkent.com.tr');
 
-        // Sadece GitHub Pages için basePath ekle
-        if (!isCustomDomain && hostname.includes('github.io')) {
-          const href = window.location.href;
-          const match = href.match(/github\.io\/([^\/\?]+)/);
+        // Özel domainlerde basePath ekleme
+        if (isCustomDomain) {
+          // Path'i normalize et
+          let cleanPath = href.trim();
+          if (!cleanPath.startsWith('/')) {
+            cleanPath = '/' + cleanPath;
+          }
+          return cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
+        }
+
+        // GitHub Pages için basePath ekle
+        if (hostname.includes('github.io')) {
+          // Repository adını bul
+          let basePath = '';
           
-          if (match && match[1]) {
-            const basePath = `/${match[1]}`;
+          // Yöntem 1: URL'den regex ile çıkar
+          const hrefMatch = window.location.href.match(/github\.io\/([^\/\?]+)/);
+          if (hrefMatch && hrefMatch[1]) {
+            basePath = `/${hrefMatch[1]}`;
+          } else {
+            // Yöntem 2: Pathname'den çıkar
+            const pathname = window.location.pathname;
+            const pathParts = pathname.split('/').filter(Boolean);
+            if (pathParts.length > 0) {
+              basePath = `/${pathParts[0]}`;
+            }
+          }
+
+          // BasePath bulunduysa ekle
+          if (basePath) {
+            // Path'i normalize et
+            let cleanPath = href.trim();
             
-            // Path'i normalize et - başındaki ve sonundaki slash'ları temizle
-            let cleanPath = path.trim();
-            
-            // Path zaten basePath içeriyorsa (tam başında), sadece basePath'ten sonrasını al
-            // Örnek: /bagkent-website/projeler -> projeler
+            // Path zaten basePath içeriyorsa çıkar
             if (cleanPath.startsWith(basePath + '/') || cleanPath === basePath) {
               cleanPath = cleanPath.substring(basePath.length);
             }
             
-            // Başındaki slash'ı kaldır (eklerken ekleyeceğiz)
+            // Başındaki slash'ları temizle
             while (cleanPath.startsWith('/')) {
               cleanPath = cleanPath.substring(1);
             }
             
-            // Eğer cleanPath boşsa veya sadece '/', basePath + '/' döndür (ana sayfa)
-            if (!cleanPath || cleanPath === '' || cleanPath === '/') {
+            // Ana sayfa için
+            if (!cleanPath || cleanPath === '') {
               return `${basePath}/`;
             }
             
-            // Trailing slash ekle (Next.js static export için)
+            // Trailing slash ekle
             const finalPath = cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
-            // BasePath + path'i birleştir
             return `${basePath}/${finalPath}`;
           }
         }
-        
-        // Özel domain veya local development - trailing slash ekle
-        // Path zaten trailing slash ile bitiyorsa olduğu gibi döndür
-        return path.endsWith('/') ? path : `${path}/`;
+
+        // Local development veya basePath bulunamadı
+        let cleanPath = href.trim();
+        if (!cleanPath.startsWith('/')) {
+          cleanPath = '/' + cleanPath;
+        }
+        return cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
       } catch (e) {
         console.warn('SafeLink error:', e);
       }
     }
 
-    // Server-side veya hata durumunda - trailing slash ekle
-    return path.endsWith('/') ? path : `${path}/`;
-  };
-
-  const fullPath = getFullPath(href);
+    // Server-side veya hata durumunda
+    let cleanPath = href.trim();
+    if (!cleanPath.startsWith('/')) {
+      cleanPath = '/' + cleanPath;
+    }
+    return cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
+  }, [href]);
 
   // External URL'ler için normal <a> tag kullan
   if (fullPath.startsWith('http://') || fullPath.startsWith('https://') || fullPath.startsWith('mailto:') || fullPath.startsWith('tel:')) {
@@ -93,8 +117,7 @@ export default function SafeLink({ href, children, className, onClick, ...props 
     );
   }
 
-  // Static export için - Next.js Link yerine normal <a> tag kullan
-  // Bu, client-side routing hatalarını önler
+  // Static export için - normal <a> tag kullan
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
       onClick();
@@ -108,4 +131,3 @@ export default function SafeLink({ href, children, className, onClick, ...props 
     </a>
   );
 }
-
