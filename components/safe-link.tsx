@@ -25,6 +25,7 @@ export default function SafeLink({ href, children, className, onClick, ...props 
     if (typeof window !== 'undefined') {
       try {
         const hostname = window.location.hostname;
+        const currentPathname = window.location.pathname;
         
         // Özel domain (bagkent.com, bagkent.com.tr) kontrolü - basePath gerekmez
         const isCustomDomain = 
@@ -42,24 +43,39 @@ export default function SafeLink({ href, children, className, onClick, ...props 
           
           if (match && match[1]) {
             const basePath = `/${match[1]}`;
-            // Path zaten basePath ile başlıyorsa tekrar ekleme
-            if (path.startsWith(basePath)) {
-              return path.endsWith('/') ? path : `${path}/`;
+            
+            // Path'den önce basePath varsa çıkar (zaten ekli olabilir)
+            let cleanPath = path;
+            if (cleanPath.startsWith(basePath)) {
+              cleanPath = cleanPath.substring(basePath.length);
             }
+            
+            // Path zaten basePath ile başlıyorsa ve mevcut pathname'de de varsa, sadece path'i kullan
+            if (currentPathname.includes(basePath) && path.startsWith(basePath)) {
+              cleanPath = path.substring(basePath.length);
+            }
+            
+            // Eğer cleanPath boşsa veya sadece '/' ise, basePath + '/' döndür
+            if (!cleanPath || cleanPath === '/') {
+              return `${basePath}/`;
+            }
+            
             // Trailing slash ekle (Next.js static export için)
-            const fullPath = `${basePath}${path.startsWith('/') ? path : '/' + path}`;
+            const fullPath = `${basePath}${cleanPath.startsWith('/') ? cleanPath : '/' + cleanPath}`;
             return fullPath.endsWith('/') ? fullPath : `${fullPath}/`;
           }
         }
         
         // Özel domain veya local development - trailing slash ekle
+        // Path zaten trailing slash ile bitiyorsa olduğu gibi döndür
         return path.endsWith('/') ? path : `${path}/`;
       } catch (e) {
         console.warn('SafeLink error:', e);
       }
     }
 
-    return path;
+    // Server-side veya hata durumunda - trailing slash ekle
+    return path.endsWith('/') ? path : `${path}/`;
   };
 
   const fullPath = getFullPath(href);
