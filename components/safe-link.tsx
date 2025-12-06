@@ -58,13 +58,14 @@ export default function SafeLink({ href, children, className, onClick, ...props 
               cleanPath = cleanPath.substring(1);
             }
             
-            // Eğer cleanPath boşsa, basePath + '/' döndür (ana sayfa)
-            if (!cleanPath || cleanPath === '') {
+            // Eğer cleanPath boşsa veya sadece '/', basePath + '/' döndür (ana sayfa)
+            if (!cleanPath || cleanPath === '' || cleanPath === '/') {
               return `${basePath}/`;
             }
             
             // Trailing slash ekle (Next.js static export için)
             const finalPath = cleanPath.endsWith('/') ? cleanPath : `${cleanPath}/`;
+            // BasePath + path'i birleştir
             return `${basePath}/${finalPath}`;
           }
         }
