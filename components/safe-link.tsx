@@ -45,11 +45,16 @@ export default function SafeLink({ href, children, className, onClick, ...props 
             const basePath = `/${match[1]}`;
             // Path zaten basePath ile başlıyorsa tekrar ekleme
             if (path.startsWith(basePath)) {
-              return path;
+              return path.endsWith('/') ? path : `${path}/`;
             }
-            return `${basePath}${path.startsWith('/') ? path : '/' + path}`;
+            // Trailing slash ekle (Next.js static export için)
+            const fullPath = `${basePath}${path.startsWith('/') ? path : '/' + path}`;
+            return fullPath.endsWith('/') ? fullPath : `${fullPath}/`;
           }
         }
+        
+        // Özel domain veya local development - trailing slash ekle
+        return path.endsWith('/') ? path : `${path}/`;
       } catch (e) {
         console.warn('SafeLink error:', e);
       }
