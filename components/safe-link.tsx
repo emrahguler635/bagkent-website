@@ -1,7 +1,6 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Link from 'next/link';
 
 interface SafeLinkProps {
   href: string;
@@ -74,11 +73,19 @@ export default function SafeLink({ href, children, className, onClick, ...props 
     );
   }
 
-  // Internal linkler için Next.js Link kullan
+  // Static export için - Next.js Link yerine normal <a> tag kullan
+  // Bu, client-side routing hatalarını önler
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onClick) {
+      onClick();
+    }
+    // Normal navigation - browser'ın default davranışı
+  };
+
   return (
-    <Link href={fullPath} className={className} onClick={onClick} {...props}>
+    <a href={fullPath} className={className} onClick={handleClick} {...props}>
       {children}
-    </Link>
+    </a>
   );
 }
 
