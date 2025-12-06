@@ -106,7 +106,7 @@ export default function YonetimPage() {
         </div>
       </section>
 
-      {/* Genel Müdür Section */}
+      {/* Yönetim Kurulu Başkanı Section */}
       <section className="section-padding bg-gray-50">
         <div className="container-custom">
           <motion.div
@@ -117,11 +117,11 @@ export default function YonetimPage() {
           >
             <div className="flex items-center justify-center mb-4">
               <Building2 className="w-8 h-8 text-blue-600 mr-3" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Genel Müdür</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Yönetim Kurulu Başkanı</h2>
             </div>
           </motion.div>
 
-          {/* Genel Müdür Card */}
+          {/* Yönetim Kurulu Başkanı Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ export default function YonetimPage() {
                   {/* Info Section */}
                   <div className="flex-1 text-center md:text-left">
                     {/* Name and Title */}
-                    <h3 className="text-2xl font-bold text-white mb-2">GENEL MÜDÜR</h3>
+                    <h3 className="text-2xl font-bold text-white mb-2">YÖNETİM KURULU BAŞKANI</h3>
                     <p className="text-xl text-blue-50 font-semibold mb-6">Salih KUMBAR</p>
 
                     {/* Click to view bio hint */}
@@ -258,7 +258,7 @@ export default function YonetimPage() {
         </div>
       )}
 
-      {/* Genel Müdür Biography Modal */}
+      {/* Yönetim Kurulu Başkanı Biography Modal */}
       {showGenelMudurBioModal && (
         <div 
           className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
@@ -296,7 +296,7 @@ export default function YonetimPage() {
                 </div>
                 <div>
                   <h3 className="text-3xl font-bold mb-2">Salih KUMBAR</h3>
-                  <p className="text-xl text-blue-100">Genel Müdür</p>
+                  <p className="text-xl text-blue-100">Yönetim Kurulu Başkanı</p>
                 </div>
               </div>
             </div>
