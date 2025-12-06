@@ -204,10 +204,12 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="mb-6"
+              className="mb-8"
             >
-              <h3 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-2 tracking-tight">
-                BağKent Sizinle Güzel
+              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 tracking-tight leading-tight">
+                <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                  BağKent Sizinle Güzel
+                </span>
               </h3>
             </motion.div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
