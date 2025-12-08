@@ -14,8 +14,7 @@ const defaultFormData = {
     slogan: 'BağKent Sizinle Güzel',
     ctaTitle: 'Hayalinizdeki Projeyi Birlikte Gerçekleştirelim',
     ctaText: 'Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız.',
-  });
-  const [saving, setSaving] = useState(false);
+};
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
