@@ -4,12 +4,11 @@ import { motion } from 'framer-motion';
 import ProjectCard from '@/components/project-card';
 import SafeLink from '@/components/safe-link';
 import { Building2, Home, Store, Hammer } from 'lucide-react';
-import { getAllProjectsWithImages } from '@/lib/projects-data';
+import { useProjects } from '@/hooks/useProjects';
 
 export default function ProjectsPage() {
-  // Merkezi veri kaynağından projeleri al
-  // Görseller ProjectCard component'i içinde işlenecek
-  const projects = getAllProjectsWithImages();
+  // JSON dosyasından projeleri yükle
+  const { projects, loading } = useProjects();
 
   const categories = [
     { name: 'Tümü', icon: Building2, count: projects.length },
@@ -65,19 +64,26 @@ export default function ProjectsPage() {
       {/* Projects Grid */}
       <section className="pb-16 bg-gray-50">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <ProjectCard 
-                key={project.slug} 
-                slug={project.slug}
-                title={project.title}
-                description={project.description}
-                image={project.image}
-                category={project.category}
-                delay={index * 0.1} 
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Projeler yükleniyor...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project, index) => (
+                <ProjectCard 
+                  key={project.slug} 
+                  slug={project.slug}
+                  title={project.title}
+                  description={project.description}
+                  image={project.image}
+                  category={project.category}
+                  fullProject={project}
+                  delay={index * 0.1} 
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

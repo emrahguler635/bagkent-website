@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useImagePath } from '@/hooks/useImagePath';
+import { Project } from '@/lib/projects-data';
 
 interface ProjectCardProps {
   slug?: string;
@@ -12,9 +13,10 @@ interface ProjectCardProps {
   image: string;
   category: string;
   delay?: number;
+  fullProject?: Project; // Tam proje detayları (opsiyonel)
 }
 
-const ProjectCard = ({ slug, title, description, image, category, delay = 0 }: ProjectCardProps) => {
+const ProjectCard = ({ slug, title, description, image, category, delay = 0, fullProject }: ProjectCardProps) => {
   const imagePath = useImagePath(image);
   
   return (
