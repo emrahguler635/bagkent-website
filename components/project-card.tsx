@@ -16,7 +16,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ slug, title, description, image, category, delay = 0 }: ProjectCardProps) => {
-  const projectUrl = slug ? `/projeler/${slug}` : '#';
+  // Static export için query string kullan
+  const projectUrl = slug ? `/projeler/detay?slug=${slug}` : '#';
   const imagePath = useImagePath(image);
   
   const cardContent = (
