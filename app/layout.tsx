@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { FaviconUpdater } from "./metadata";
+import ConditionalLayout from "@/components/conditional-layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,9 +49,9 @@ export default function RootLayout({
     <html lang="tr" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <FaviconUpdater />
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
       </body>
     </html>
   );

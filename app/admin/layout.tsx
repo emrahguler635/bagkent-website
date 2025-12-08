@@ -60,7 +60,7 @@ export default function AdminLayout({
     };
 
     checkAuth();
-  }, [pathname, router]);
+  }, [pathname]);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
