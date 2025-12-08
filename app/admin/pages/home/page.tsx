@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, X, Home } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { getBasePath } from '@/lib/getBasePath';
 
-export default function EditHomePage() {
-  const [formData, setFormData] = useState({
+const defaultFormData = {
     heroTitle: 'Geleceği İnşa Eden Güven',
     heroSubtitle: 'Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.',
     aboutTitle: 'BağKent A.Ş. Hakkında',

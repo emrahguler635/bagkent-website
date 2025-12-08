@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, X, Mail } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { getBasePath } from '@/lib/getBasePath';
 
-export default function EditContactPage() {
-  const [formData, setFormData] = useState({
+const defaultFormData = {
     heroTitle: 'İletişim',
     heroSubtitle: 'Projeleriniz için bizimle iletişime geçin. Size en kısa sürede dönüş yapacağız.',
     phone: '0212 410 06 00',
@@ -18,21 +17,55 @@ export default function EditContactPage() {
     workHoursSunday: 'Pazar: Kapalı',
     ctaTitle: 'Ofisimizi Ziyaret Edin',
     ctaText: 'Randevu alarak ofisimizi ziyaret edebilir, projeleriniz hakkında detaylı görüşme yapabilirsiniz. Sizi aramızda görmekten mutluluk duyarız.',
-  });
+};
+
+export default function EditContactPage() {
+  const [formData, setFormData] = useState(defaultFormData);
   const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Sayfa yüklendiğinde localStorage'dan yükle
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedData = localStorage.getItem('admin_page_contact');
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          setFormData(parsed);
+        } catch (e) {
+          console.error('Failed to parse saved data:', e);
+          setFormData(defaultFormData);
+        }
+      }
+      setLoaded(true);
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
-    const contentJSON = JSON.stringify(formData, null, 2);
-    alert('İletişim sayfası içeriği güncellendi!\n\nNot: Gerçek güncelleme için app/iletisim/page.tsx dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nİçerik JSON:\n' + contentJSON);
-    
+    // localStorage'a kaydet
     if (typeof window !== 'undefined') {
-      const basePath = getBasePath();
-      window.location.href = `${basePath}/admin/pages`;
+      localStorage.setItem('admin_page_contact', JSON.stringify(formData));
     }
+
+    const contentJSON = JSON.stringify(formData, null, 2);
+    alert('İletişim sayfası içeriği güncellendi ve kaydedildi!\n\nNot: Gerçek güncelleme için app/iletisim/page.tsx dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nİçerik JSON:\n' + contentJSON);
+    
+    setSaving(false);
   };
+
+  if (!loaded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">

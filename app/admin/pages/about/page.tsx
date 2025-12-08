@@ -1,36 +1,76 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, X, Building2 } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { getBasePath } from '@/lib/getBasePath';
 
+// Varsayılan değerler (gerçek sayfadan alınmalı)
+const defaultFormData = {
+  heroTitle: 'Hakkımızda',
+  heroSubtitle: '30 yılı aşkın deneyimimizle inşaat sektöründe güvenilir ve kaliteli hizmetin adresi.',
+  storyTitle: 'Şirketimizin Hikayesi',
+  storyText1: 'BağKent A.Ş., 1990 yılında İstanbul\'da kurulmuştur. Kuruluşumuzdan bu yana inşaat sektöründe kalite, güvenilirlik ve müşteri memnuniyeti odaklı hizmet anlayışımızı sürdürmekteyiz.',
+  storyText2: 'Uzman kadromuz, modern teknolojiler ve yenilikçi yaklaşımımızla konut, ticari yapı ve altyapı projelerinde sektörün önde gelen firmalarından biri haline geldik. 250\'den fazla başarıyla tamamlanmış projemizle müşterilerimizin güvenini kazandık.',
+  storyText3: 'Günümüzde İstanbul ve çevresinde faaliyet gösteren şirketimiz, her geçen gün büyüyen kadrosu ve artan proje portföyüyle sektörde iddialı bir konumda bulunmaktadır.',
+  teamTitle: 'Ekibimiz',
+  teamText1: 'BağKent A.Ş. olarak, alanında uzman mimar, mühendis ve teknik personelden oluşan güçlü bir ekibe sahibiz. Her biri kendi alanında deneyimli profesyonellerden oluşan ekibimiz, projelerin en iyi şekilde tamamlanması için özverili çalışmaktadır.',
+  teamText2: 'Sürekli eğitim ve gelişim programlarımızla ekip üyelerimizin bilgi ve becerilerini güncel tutuyoruz. Bu sayede sektördeki yenilikleri takip ediyor ve projelerimize en modern çözümleri entegre ediyoruz.',
+};
+
 export default function EditAboutPage() {
-  const [formData, setFormData] = useState({
-    heroTitle: 'Hakkımızda',
-    heroSubtitle: '30 yılı aşkın deneyimimizle inşaat sektöründe güvenilir ve kaliteli hizmetin adresi.',
-    storyTitle: 'Şirketimizin Hikayesi',
-    storyText1: 'BağKent A.Ş., 1990 yılında İstanbul\'da kurulmuştur. Kuruluşumuzdan bu yana inşaat sektöründe kalite, güvenilirlik ve müşteri memnuniyeti odaklı hizmet anlayışımızı sürdürmekteyiz.',
-    storyText2: 'Uzman kadromuz, modern teknolojiler ve yenilikçi yaklaşımımızla konut, ticari yapı ve altyapı projelerinde sektörün önde gelen firmalarından biri haline geldik. 250\'den fazla başarıyla tamamlanmış projemizle müşterilerimizin güvenini kazandık.',
-    storyText3: 'Günümüzde İstanbul ve çevresinde faaliyet gösteren şirketimiz, her geçen gün büyüyen kadrosu ve artan proje portföyüyle sektörde iddialı bir konumda bulunmaktadır.',
-    teamTitle: 'Ekibimiz',
-    teamText1: 'BağKent A.Ş. olarak, alanında uzman mimar, mühendis ve teknik personelden oluşan güçlü bir ekibe sahibiz. Her biri kendi alanında deneyimli profesyonellerden oluşan ekibimiz, projelerin en iyi şekilde tamamlanması için özverili çalışmaktadır.',
-    teamText2: 'Sürekli eğitim ve gelişim programlarımızla ekip üyelerimizin bilgi ve becerilerini güncel tutuyoruz. Bu sayede sektördeki yenilikleri takip ediyor ve projelerimize en modern çözümleri entegre ediyoruz.',
-  });
+  const [formData, setFormData] = useState(defaultFormData);
   const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Sayfa yüklendiğinde localStorage'dan veya varsayılan değerlerden yükle
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedData = localStorage.getItem('admin_page_about');
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          setFormData(parsed);
+        } catch (e) {
+          console.error('Failed to parse saved data:', e);
+          setFormData(defaultFormData);
+        }
+      }
+      setLoaded(true);
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
-    const contentJSON = JSON.stringify(formData, null, 2);
-    alert('Hakkımızda sayfası içeriği güncellendi!\n\nNot: Gerçek güncelleme için app/kurumsal/hakkimizda/page.tsx dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nİçerik JSON:\n' + contentJSON);
-    
+    // localStorage'a kaydet
     if (typeof window !== 'undefined') {
-      const basePath = getBasePath();
-      window.location.href = `${basePath}/admin/pages`;
+      localStorage.setItem('admin_page_about', JSON.stringify(formData));
     }
+
+    const contentJSON = JSON.stringify(formData, null, 2);
+    alert('Hakkımızda sayfası içeriği güncellendi ve kaydedildi!\n\nNot: Gerçek güncelleme için app/kurumsal/hakkimizda/page.tsx dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nİçerik JSON:\n' + contentJSON);
+    
+    setSaving(false);
+    
+    // Sayfada kal, yönlendirme yapma
+    // if (typeof window !== 'undefined') {
+    //   const basePath = getBasePath();
+    //   window.location.href = `${basePath}/admin/pages`;
+    // }
   };
+
+  if (!loaded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
