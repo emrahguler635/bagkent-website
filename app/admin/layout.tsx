@@ -35,6 +35,8 @@ export default function AdminLayout({
   }, []);
 
   useEffect(() => {
+    if (!pathname) return; // Pathname henüz yüklenmediyse bekle
+    
     // Admin giriş sayfasındaysa kontrol yapma
     const isLoginPage = pathname === '/admin/login' || pathname === '/admin/login/' || pathname.endsWith('/admin/login');
     if (isLoginPage) {

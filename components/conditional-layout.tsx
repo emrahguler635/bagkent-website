@@ -9,9 +9,13 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const pathname = window.location.pathname;
+      const fullPath = window.location.pathname;
+      // BasePath'i kaldır (örn: /bagkent-website/admin/login -> /admin/login)
+      const basePath = fullPath.includes('/bagkent-website') ? '/bagkent-website' : '';
+      const cleanPath = basePath ? fullPath.replace(basePath, '') : fullPath;
+      
       // Admin sayfaları için header/footer gösterme
-      if (pathname.startsWith('/admin')) {
+      if (cleanPath.startsWith('/admin')) {
         setShowLayout(false);
       } else {
         setShowLayout(true);
@@ -19,6 +23,7 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
     }
   }, []);
 
+  // Admin sayfaları için header/footer gösterme
   if (!showLayout) {
     return <>{children}</>;
   }
