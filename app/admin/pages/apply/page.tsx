@@ -215,7 +215,23 @@ export default function ApplyToWebsitePage() {
 
           const fileData = await getFileResponse.json();
           const sha = fileData.sha;
-          const currentContent = atob(fileData.content.replace(/\n/g, ''));
+          
+          // Base64 decode with proper UTF-8 handling
+          const base64ToUtf8 = (str: string) => {
+            try {
+              return decodeURIComponent(escape(atob(str)));
+            } catch (e) {
+              // Fallback
+              const binary = atob(str);
+              const bytes = new Uint8Array(binary.length);
+              for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+              }
+              return new TextDecoder('utf-8').decode(bytes);
+            }
+          };
+          
+          const currentContent = base64ToUtf8(fileData.content.replace(/\n/g, ''));
 
           // Dosya içeriğini güncelle
           // Not: Bu kısım sadece defaultContents'i güncelleyecek şekilde çalışıyor
@@ -237,9 +253,25 @@ export default function ApplyToWebsitePage() {
           );
 
           if (contentFileResponse.ok) {
-            const contentFileData = await contentFileResponse.json();
-            const contentSha = contentFileData.sha;
-            let contentFileContent = atob(contentFileData.content.replace(/\n/g, ''));
+          const contentFileData = await contentFileResponse.json();
+          const contentSha = contentFileData.sha;
+          
+          // Base64 decode with proper UTF-8 handling for Turkish characters
+          const base64ToUtf8 = (str: string) => {
+            try {
+              return decodeURIComponent(escape(atob(str)));
+            } catch (e) {
+              // Fallback
+              const binary = atob(str);
+              const bytes = new Uint8Array(binary.length);
+              for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+              }
+              return new TextDecoder('utf-8').decode(bytes);
+            }
+          };
+          
+          let contentFileContent = base64ToUtf8(contentFileData.content.replace(/\n/g, ''));
 
             // defaultContents objesini güncelle
             const pageType = pageName as keyof typeof fileMap;
@@ -254,6 +286,19 @@ export default function ApplyToWebsitePage() {
               );
 
               // Güncellenmiş içeriği GitHub'a yükle
+              // UTF-8 encoding için doğru base64 encoding
+              const utf8ToBase64 = (str: string) => {
+                try {
+                  return btoa(unescape(encodeURIComponent(str)));
+                } catch (e) {
+                  // Fallback: manuel UTF-8 encoding
+                  const utf8 = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+                    return String.fromCharCode(parseInt(p1, 16));
+                  });
+                  return btoa(utf8);
+                }
+              };
+
               const updateResponse = await fetch(
                 `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}`,
                 {
@@ -261,11 +306,11 @@ export default function ApplyToWebsitePage() {
                   headers: {
                     'Authorization': `token ${githubToken}`,
                     'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json; charset=utf-8',
                   },
                   body: JSON.stringify({
                     message: `Admin panelinden ${pageName} sayfası güncellendi`,
-                    content: btoa(unescape(encodeURIComponent(contentFileContent))),
+                    content: utf8ToBase64(contentFileContent),
                     sha: contentSha,
                     branch: BRANCH,
                   }),

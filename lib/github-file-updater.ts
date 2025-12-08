@@ -53,9 +53,27 @@ export async function updateFileOnGitHub(
           'Accept': 'application/vnd.github.v3+json',
           'Content-Type': 'application/json',
         },
+        // UTF-8 encoding için doğru base64 encoding
+        const utf8ToBase64 = (str: string) => {
+          try {
+            // En iyi yöntem: encodeURIComponent ile önce UTF-8'e çevir, sonra base64
+            return btoa(
+              unescape(
+                encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+                  return String.fromCharCode(parseInt(p1, 16));
+                })
+              )
+            );
+          } catch (e) {
+            // Fallback
+            const utf8 = encodeURIComponent(str);
+            return btoa(unescape(utf8));
+          }
+        };
+
         body: JSON.stringify({
           message: commitMessage,
-          content: btoa(unescape(encodeURIComponent(newContent))), // UTF-8 encoding
+          content: utf8ToBase64(newContent),
           sha: sha,
           branch: BRANCH,
         }),
