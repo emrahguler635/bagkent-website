@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FileEdit, Home, Building2, Eye, Target, Users, Mail } from 'lucide-react';
+import { FileEdit, Home, Building2, Eye, Target, Users, Mail, Download } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 
 const pages = [
@@ -95,12 +95,29 @@ export default function AdminPagesPage() {
         ))}
       </div>
 
-      <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-blue-900 mb-2">💡 Bilgi</h3>
-        <p className="text-blue-800 text-sm">
-          Sayfa içeriklerini düzenledikten sonra, değişiklikleri kalıcı olarak uygulamak için 
-          ilgili dosyaları manuel olarak güncellemeniz ve GitHub'a commit etmeniz gerekir.
-        </p>
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-blue-900 mb-2">💡 Bilgi</h3>
+          <p className="text-blue-800 text-sm mb-4">
+            Sayfa içeriklerini düzenledikten sonra, değişiklikleri kalıcı olarak uygulamak için 
+            ilgili dosyaları manuel olarak güncellemeniz ve GitHub'a commit etmeniz gerekir.
+          </p>
+          <SafeLink
+            href="/admin/pages/export"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+          >
+            <Download className="w-4 h-4" />
+            Verileri Dışa Aktar
+          </SafeLink>
+        </div>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-green-900 mb-2">✅ İpucu</h3>
+          <p className="text-green-800 text-sm">
+            Değişiklikleriniz otomatik olarak tarayıcınızda (localStorage) kaydediliyor. 
+            Web sitesine yansıması için "Verileri Dışa Aktar" butonunu kullanarak JSON verisini 
+            alın ve ilgili dosyalara uygulayın.
+          </p>
+        </div>
       </div>
     </div>
   );
