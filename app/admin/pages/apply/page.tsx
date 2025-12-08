@@ -51,7 +51,7 @@ export default function ApplyToWebsitePage() {
       };
       loadData();
       
-      // Token'ı localStorage'dan yükle
+      // Token'ı localStorage'dan yükle - HER ZAMAN kontrol et
       const savedToken = localStorage.getItem('github_token');
       if (savedToken) {
         setGithubToken(savedToken);
@@ -59,9 +59,23 @@ export default function ApplyToWebsitePage() {
       
       // Storage değişikliklerini dinle
       window.addEventListener('storage', loadData);
-      return () => window.removeEventListener('storage', loadData);
+      
+      // Token değişikliklerini de dinle
+      const checkToken = () => {
+        const currentToken = localStorage.getItem('github_token');
+        if (currentToken && currentToken !== githubToken) {
+          setGithubToken(currentToken);
+        }
+      };
+      
+      // Her render'da token'ı kontrol et
+      checkToken();
+      
+      return () => {
+        window.removeEventListener('storage', loadData);
+      };
     }
-  }, []);
+  }, [githubToken]); // githubToken dependency eklendi
 
   const handleApplyToWebsite = () => {
     setApplied(true);
@@ -80,10 +94,22 @@ export default function ApplyToWebsitePage() {
   };
 
   const saveGithubToken = () => {
-    if (githubToken) {
-      localStorage.setItem('github_token', githubToken);
-      alert('GitHub token kaydedildi!');
+    if (githubToken && githubToken.trim()) {
+      localStorage.setItem('github_token', githubToken.trim());
+      setGithubToken(githubToken.trim()); // State'i de güncelle
+      alert('✅ GitHub token başarıyla kaydedildi!\n\nToken artık otomatik olarak yüklenecek.');
+    } else {
+      alert('⚠️ Lütfen geçerli bir token girin!');
     }
+  };
+
+  // Token input değiştiğinde otomatik kaydetme (opsiyonel - kullanıcı isterse)
+  const handleTokenChange = (value: string) => {
+    setGithubToken(value);
+    // Otomatik kaydetmek isterseniz burayı açabilirsiniz:
+    // if (value && value.trim()) {
+    //   localStorage.setItem('github_token', value.trim());
+    // }
   };
 
   const updateFileContent = async (filePath: string, content: string, token: string) => {
@@ -331,17 +357,23 @@ export default function ApplyToWebsitePage() {
                   <input
                     type="password"
                     value={githubToken}
-                    onChange={(e) => setGithubToken(e.target.value)}
-                    placeholder="ghp_xxxxxxxxxxxxx"
+                    onChange={(e) => handleTokenChange(e.target.value)}
+                    placeholder={githubToken ? 'Token kaydedildi (görmek için tıklayın)' : 'ghp_xxxxxxxxxxxxx'}
                     className="flex-1 px-4 py-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   />
                   <button
                     onClick={saveGithubToken}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium whitespace-nowrap"
                   >
-                    Kaydet
+                    {githubToken && githubToken === localStorage.getItem('github_token') ? '✓ Kaydedildi' : 'Kaydet'}
                   </button>
                 </div>
+                {githubToken && (
+                  <p className="text-xs text-purple-700 mt-2 flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3" />
+                    Token girildi - Kaydet butonuna tıklayarak kaydedin
+                  </p>
+                )}
                 <p className="text-xs text-purple-700 mt-2">
                   Token oluşturmak için: <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer" className="underline">GitHub Settings → Developer settings → Personal access tokens</a>
                 </p>
