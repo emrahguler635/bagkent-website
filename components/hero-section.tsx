@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Building2, Users, Award } from 'lucide-react';
-import Link from 'next/link';
+import SafeLink from './safe-link';
 import { useState, useEffect } from 'react';
 import { useImagePath } from '@/hooks/useImagePath';
 
@@ -139,19 +139,19 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
-            <Link
+            <SafeLink
               href="/projeler"
               className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-xl hover:shadow-2xl group"
             >
               Projelerimizi Keşfedin
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
+            </SafeLink>
+            <SafeLink
               href="/iletisim"
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-900 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-xl"
             >
               Bize Ulaşın
-            </Link>
+            </SafeLink>
           </motion.div>
 
           {/* Stats */}
