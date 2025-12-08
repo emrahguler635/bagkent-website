@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FileEdit, Home, Building2, Eye, Target, Users, Mail, Download } from 'lucide-react';
+import { FileEdit, Home, Building2, Eye, Target, Users, Mail, Download, Upload } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 
 const pages = [
@@ -102,13 +102,22 @@ export default function AdminPagesPage() {
             Sayfa içeriklerini düzenledikten sonra, değişiklikleri kalıcı olarak uygulamak için 
             ilgili dosyaları manuel olarak güncellemeniz ve GitHub'a commit etmeniz gerekir.
           </p>
-          <SafeLink
-            href="/admin/pages/export"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-          >
-            <Download className="w-4 h-4" />
-            Verileri Dışa Aktar
-          </SafeLink>
+          <div className="flex flex-wrap gap-3">
+            <SafeLink
+              href="/admin/pages/apply"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+            >
+              <Upload className="w-4 h-4" />
+              Web Sitesine Uygula
+            </SafeLink>
+            <SafeLink
+              href="/admin/pages/export"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            >
+              <Download className="w-4 h-4" />
+              Verileri Dışa Aktar
+            </SafeLink>
+          </div>
         </div>
         <div className="bg-green-50 border border-green-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-green-900 mb-2">✅ İpucu</h3>
