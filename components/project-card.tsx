@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, X, Calendar, MapPin, Building2 } from 'lucide-react';
@@ -20,7 +20,12 @@ interface ProjectCardProps {
 const ProjectCard = ({ slug, title, description, image, category, delay = 0 }: ProjectCardProps) => {
   const [showModal, setShowModal] = useState(false);
   const imagePath = useImagePath(image);
-  const project = slug ? getProjectBySlug(slug) : null;
+  
+  // Project'i useMemo ile cache'le
+  const project = useMemo(() => {
+    return slug ? getProjectBySlug(slug) : null;
+  }, [slug]);
+  
   const projectImage = project ? useImagePath(project.image) : imagePath;
   const fullDescription = project?.fullDescription || description;
   
