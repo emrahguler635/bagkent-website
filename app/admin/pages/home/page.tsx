@@ -6,29 +6,63 @@ import SafeLink from '@/components/safe-link';
 import { getBasePath } from '@/lib/getBasePath';
 
 const defaultFormData = {
-    heroTitle: 'Geleceği İnşa Eden Güven',
-    heroSubtitle: 'Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.',
-    aboutTitle: 'BağKent A.Ş. Hakkında',
-    aboutText1: 'BağKent A.Ş., 30 yılı aşkın süredir inşaat sektöründe faaliyet gösteren, güvenilir ve köklü bir firmadır. Modern mimari çözümler, kaliteli işçilik ve müşteri memnuniyeti odaklı yaklaşımımızla İstanbul\'un önemli projelerine imza atıyoruz.',
-    aboutText2: 'Konut projelerinden ticari yapılara, altyapı çalışmalarından restorasyon projelerine kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.',
-    slogan: 'BağKent Sizinle Güzel',
-    ctaTitle: 'Hayalinizdeki Projeyi Birlikte Gerçekleştirelim',
-    ctaText: 'Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız.',
+  heroTitle: 'Geleceği İnşa Eden Güven',
+  heroSubtitle: 'Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.',
+  aboutTitle: 'BağKent A.Ş. Hakkında',
+  aboutText1: 'BağKent A.Ş., 30 yılı aşkın süredir inşaat sektöründe faaliyet gösteren, güvenilir ve köklü bir firmadır. Modern mimari çözümler, kaliteli işçilik ve müşteri memnuniyeti odaklı yaklaşımımızla İstanbul\'un önemli projelerine imza atıyoruz.',
+  aboutText2: 'Konut projelerinden ticari yapılara, altyapı çalışmalarından restorasyon projelerine kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.',
+  slogan: 'BağKent Sizinle Güzel',
+  ctaTitle: 'Hayalinizdeki Projeyi Birlikte Gerçekleştirelim',
+  ctaText: 'Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız.',
 };
+
+export default function EditHomePage() {
+  const [formData, setFormData] = useState(defaultFormData);
+  const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Sayfa yüklendiğinde localStorage'dan yükle
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedData = localStorage.getItem('admin_page_home');
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          setFormData(parsed);
+        } catch (e) {
+          console.error('Failed to parse saved data:', e);
+          setFormData(defaultFormData);
+        }
+      }
+      setLoaded(true);
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
-    // JSON formatında göster
-    const contentJSON = JSON.stringify(formData, null, 2);
-    alert('Ana sayfa içeriği güncellendi!\n\nNot: Gerçek güncelleme için app/page.tsx dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nİçerik JSON:\n' + contentJSON);
-    
+    // localStorage'a kaydet
     if (typeof window !== 'undefined') {
-      const basePath = getBasePath();
-      window.location.href = `${basePath}/admin/pages`;
+      localStorage.setItem('admin_page_home', JSON.stringify(formData));
     }
+
+    const contentJSON = JSON.stringify(formData, null, 2);
+    alert('Ana sayfa içeriği güncellendi ve kaydedildi!\n\nNot: Gerçek kaydetme için app/page.tsx dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nİçerik JSON:\n' + contentJSON);
+    
+    setSaving(false);
   };
+
+  if (!loaded) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -173,4 +207,3 @@ const defaultFormData = {
     </div>
   );
 }
-
