@@ -16,11 +16,18 @@ export default function AdminLayout({
   useEffect(() => {
     // Pathname'i al
     if (typeof window !== 'undefined') {
-      setPathname(window.location.pathname);
+      const fullPath = window.location.pathname;
+      // BasePath'i kaldır (örn: /bagkent-website/admin/login -> /admin/login)
+      const basePath = fullPath.includes('/bagkent-website') ? '/bagkent-website' : '';
+      const cleanPath = basePath ? fullPath.replace(basePath, '') : fullPath;
+      setPathname(cleanPath);
       
       // Pathname değişikliklerini dinle
       const handleLocationChange = () => {
-        setPathname(window.location.pathname);
+        const currentPath = window.location.pathname;
+        const currentBasePath = currentPath.includes('/bagkent-website') ? '/bagkent-website' : '';
+        const currentCleanPath = currentBasePath ? currentPath.replace(currentBasePath, '') : currentPath;
+        setPathname(currentCleanPath);
       };
       window.addEventListener('popstate', handleLocationChange);
       return () => window.removeEventListener('popstate', handleLocationChange);
@@ -29,8 +36,10 @@ export default function AdminLayout({
 
   useEffect(() => {
     // Admin giriş sayfasındaysa kontrol yapma
-    if (pathname === '/admin/login' || pathname === '/admin/login/' || pathname.endsWith('/admin/login')) {
+    const isLoginPage = pathname === '/admin/login' || pathname === '/admin/login/' || pathname.endsWith('/admin/login');
+    if (isLoginPage) {
       setChecking(false);
+      setIsAuthenticated(false);
       return;
     }
 
