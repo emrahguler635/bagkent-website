@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import SafeLink from './safe-link';
 import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { useImagePath } from '@/hooks/useImagePath';
 
@@ -30,36 +30,36 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Hızlı Bağlantılar</h4>
             <ul className="space-y-2">
               <li>
-                <Link
+                <SafeLink
                   href="/"
                   className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
                 >
                   Ana Sayfa
-                </Link>
+                </SafeLink>
               </li>
               <li>
-                <Link
+                <SafeLink
                   href="/kurumsal/hakkimizda"
                   className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
                 >
                   Hakkımızda
-                </Link>
+                </SafeLink>
               </li>
               <li>
-                <Link
+                <SafeLink
                   href="/kurumsal/misyon-vizyon"
                   className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
                 >
                   Misyon - Vizyon
-                </Link>
+                </SafeLink>
               </li>
               <li>
-                <Link
+                <SafeLink
                   href="/projeler"
                   className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
                 >
                   Projelerimiz
-                </Link>
+                </SafeLink>
               </li>
             </ul>
           </div>
@@ -157,12 +157,12 @@ const Footer = () => {
               © {currentYear} BağKent A.Ş. Tüm hakları saklıdır.
             </p>
             <div className="flex space-x-6">
-              <Link
+              <SafeLink
                 href="/iletisim"
                 className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
               >
                 İletişim
-              </Link>
+              </SafeLink>
             </div>
           </div>
         </div>
