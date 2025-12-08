@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, X, Calendar, MapPin, Building2 } from 'lucide-react';
 import { useImagePath } from '@/hooks/useImagePath';
-import { getProjectBySlug } from '@/lib/projects-data';
+import { Project } from '@/lib/projects-data';
 import SafeLink from './safe-link';
 
 interface ProjectCardProps {
@@ -15,24 +15,15 @@ interface ProjectCardProps {
   image: string;
   category: string;
   delay?: number;
+  fullProject?: Project | null; // Tam proje detayları (modal için)
 }
 
-const ProjectCard = ({ slug, title, description, image, category, delay = 0 }: ProjectCardProps) => {
+const ProjectCard = ({ slug, title, description, image, category, delay = 0, fullProject }: ProjectCardProps) => {
   const [showModal, setShowModal] = useState(false);
   const imagePath = useImagePath(image);
   
-  // Project'i useMemo ile cache'le - sadece slug varsa çalıştır
-  const project = useMemo(() => {
-    if (!slug) return null;
-    try {
-      return getProjectBySlug(slug);
-    } catch (error) {
-      console.warn('Project not found for slug:', slug);
-      return null;
-    }
-  }, [slug]);
-  
   // Project bilgilerini güvenli şekilde al
+  const project = fullProject || null;
   const projectImage = useMemo(() => {
     return project ? useImagePath(project.image) : imagePath;
   }, [project, imagePath]);

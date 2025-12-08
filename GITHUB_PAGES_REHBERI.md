@@ -230,3 +230,4 @@ Deploy başarılı olduktan sonra:
 **Son Güncelleme:** 4 Aralık 2025  
 **Versiyon:** 1.0.0
 
+

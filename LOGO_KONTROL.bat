@@ -22,3 +22,4 @@ echo Footer: getImagePath("/bagkent-logo.png")
 echo.
 pause
 
+

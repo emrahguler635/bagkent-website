@@ -30,3 +30,4 @@ echo GitHub Actions otomatik deploy başlatacak...
 echo ========================================
 pause
 
+

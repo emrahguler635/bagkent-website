@@ -48,3 +48,4 @@ git push
 
 **Not:** Logo değiştirildikten sonra GitHub Actions otomatik olarak deploy edecektir.
 
+

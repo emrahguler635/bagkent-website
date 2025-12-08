@@ -57,3 +57,4 @@ Video sıkıştırıldıktan sonra:
 
 **Not:** 253 MB'lık video dosyası GitHub'a yüklenmeye çalışılırsa hata verebilir.
 
+

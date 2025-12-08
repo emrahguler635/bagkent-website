@@ -53,3 +53,4 @@ git push
 
 Eğer görselleri başka isimlerle eklemek isterseniz, kodda dosya adlarını güncellememiz gerekecek.
 
+

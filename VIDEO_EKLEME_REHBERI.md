@@ -88,3 +88,4 @@ Video ekledikten sonra:
 
 **Not:** Video dosyası büyükse, GitHub'a yükleme süresi artabilir (100 MB limit var).
 
+
