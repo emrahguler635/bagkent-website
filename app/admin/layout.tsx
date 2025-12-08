@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { LogOut, Home, FileText } from 'lucide-react';
+import { LogOut, Home, FileText, FileEdit } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { getBasePath } from '@/lib/getBasePath';
 
@@ -138,6 +138,19 @@ export default function AdminLayout({
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4" />
                     Projeler
+                  </div>
+                </SafeLink>
+                <SafeLink
+                  href="/admin/pages"
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === '/admin/pages' || pathname === '/admin/pages/' || pathname.includes('/admin/pages')
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <FileEdit className="w-4 h-4" />
+                    Sayfalar
                   </div>
                 </SafeLink>
               </nav>
