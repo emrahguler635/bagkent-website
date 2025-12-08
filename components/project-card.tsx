@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight, X, Calendar, MapPin, Building2 } from 'lucide-react';
 import { useImagePath } from '@/hooks/useImagePath';
 import { Project } from '@/lib/projects-data';
@@ -24,10 +24,7 @@ const ProjectCard = ({ slug, title, description, image, category, delay = 0, ful
   
   // Project bilgilerini güvenli şekilde al
   const project = fullProject || null;
-  const projectImage = useMemo(() => {
-    return project ? useImagePath(project.image) : imagePath;
-  }, [project, imagePath]);
-  
+  const projectImage = project ? useImagePath(project.image) : imagePath;
   const fullDescription = project?.fullDescription || description;
   
   const handleCardClick = () => {
@@ -84,8 +81,7 @@ const ProjectCard = ({ slug, title, description, image, category, delay = 0, ful
       {cardContent}
       
       {/* Modal */}
-      <AnimatePresence>
-        {showModal && project && (
+      {showModal && project && (
           <div 
             className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 overflow-y-auto"
             onClick={() => setShowModal(false)}
@@ -185,8 +181,7 @@ const ProjectCard = ({ slug, title, description, image, category, delay = 0, ful
               </div>
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+      )}
     </>
   );
 };
