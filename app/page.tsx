@@ -12,8 +12,8 @@ import { useProjects } from '@/hooks/useProjects';
 export default function Home() {
   const homepageAboutImage = useImagePath("/homepage-about.jpeg");
   
-  // JSON dosyasından ilk 3 projeyi al
-  const { projects: allProjects, loading } = useProjects();
+  // Projeleri al - ilk 3'ünü göster
+  const { projects: allProjects } = useProjects();
   const projects = allProjects.slice(0, 3);
 
   const features = [
@@ -153,26 +153,20 @@ export default function Home() {
               Gerçekleştirdiğimiz projelerde modern mimari ve kaliteli işçiliği bir araya getiriyoruz.
             </motion.p>
           </div>
-          {loading ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600">Projeler yükleniyor...</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {projects.map((project, index) => (
-                <ProjectCard 
-                  key={project.slug} 
-                  slug={project.slug}
-                  title={project.title}
-                  description={project.description}
-                  image={project.image}
-                  category={project.category}
-                  fullProject={project}
-                  delay={index * 0.1} 
-                />
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {projects.map((project, index) => (
+              <ProjectCard 
+                key={project.slug} 
+                slug={project.slug}
+                title={project.title}
+                description={project.description}
+                image={project.image}
+                category={project.category}
+                fullProject={project}
+                delay={index * 0.1} 
+              />
+            ))}
+          </div>
           <div className="text-center">
             <SafeLink
               href="/projeler"
