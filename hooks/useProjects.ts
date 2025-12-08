@@ -2,32 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import { Project } from '@/lib/projects-data';
-import { getBasePath } from '@/lib/getBasePath';
+import projectsData from '@/lib/projects-data.json';
 
 /**
  * Proje verilerini JSON dosyasından yükler
+ * Build zamanında import edilir, runtime'da fetch edilmez
  */
 export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadProjects = async () => {
-      try {
-        const basePath = getBasePath();
-        const jsonPath = basePath ? `${basePath}/projects-data.json` : '/projects-data.json';
-        const response = await fetch(jsonPath);
-        const data = await response.json();
-        setProjects(data.projects || []);
-      } catch (error) {
-        console.error('Projeler yüklenemedi:', error);
-        setProjects([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProjects();
+    // JSON dosyası direkt import edildi, hemen yükle
+    try {
+      const data = projectsData as { projects: Project[] };
+      setProjects(data.projects || []);
+    } catch (error) {
+      console.error('Projeler yüklenemedi:', error);
+      setProjects([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   return { projects, loading };
