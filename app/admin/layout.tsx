@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { LogOut, Home, FileText } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 
@@ -10,7 +9,6 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
   const [pathname, setPathname] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -52,10 +50,10 @@ export default function AdminLayout({
           } else {
             sessionStorage.removeItem('admin_authenticated');
             sessionStorage.removeItem('admin_login_time');
-            router.push('/admin/login');
+            window.location.href = '/admin/login';
           }
         } else {
-          router.push('/admin/login');
+          window.location.href = '/admin/login';
         }
         setChecking(false);
       }
@@ -68,8 +66,8 @@ export default function AdminLayout({
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('admin_authenticated');
       sessionStorage.removeItem('admin_login_time');
+      window.location.href = '/admin/login';
     }
-    router.push('/admin/login');
   };
 
   if (checking) {

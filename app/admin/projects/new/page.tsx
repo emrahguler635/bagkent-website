@@ -1,14 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Save, X, Upload } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { Project } from '@/lib/projects-data';
 
 export default function NewProjectPage() {
-  const router = useRouter();
   const [formData, setFormData] = useState<Omit<Project, 'image'> & { image: string }>({
     slug: '',
     title: '',
@@ -57,7 +54,9 @@ export default function NewProjectPage() {
     const projectJSON = JSON.stringify(formData, null, 2);
     alert('Proje taslağı kaydedildi!\n\nNot: Gerçek kaydetme için lib/projects-data.ts dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nProje JSON:\n' + projectJSON);
     
-    router.push('/admin/projects');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/admin/projects';
+    }
   };
 
   return (

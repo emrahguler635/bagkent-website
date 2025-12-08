@@ -1,25 +1,31 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { Save, X } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
-import { getProjectBySlug, Project } from '@/lib/projects-data';
+import { getAllProjectsWithImages, getProjectBySlug, Project } from '@/lib/projects-data';
 
-export default function EditProjectPage({ params }: { params: { slug: string } }) {
-  const router = useRouter();
+export default function EditProjectPage() {
   const [slug, setSlug] = useState('');
   const [formData, setFormData] = useState<Project | null>(null);
   const [saving, setSaving] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const currentSlug = window.location.pathname.split('/').pop() || '';
-      setSlug(currentSlug);
-      const project = getProjectBySlug(currentSlug);
-      if (project) {
-        setFormData(project);
+      // URL'den slug'ı al
+      const urlParams = new URLSearchParams(window.location.search);
+      const slugParam = urlParams.get('slug');
+      
+      if (slugParam) {
+        setSlug(slugParam);
+        const project = getProjectBySlug(slugParam);
+        if (project) {
+          setFormData(project);
+        }
+      } else {
+        // Eğer slug yoksa projeler listesini göster
+        setProjects(getAllProjectsWithImages());
       }
     }
   }, []);
@@ -77,8 +83,44 @@ export default function EditProjectPage({ params }: { params: { slug: string } }
     const projectJSON = JSON.stringify(formData, null, 2);
     alert('Proje düzenlemesi kaydedildi!\n\nNot: Gerçek kaydetme için lib/projects-data.ts dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nDüzenlenen Proje JSON:\n' + projectJSON);
     
-    router.push('/admin/projects');
+    if (typeof window !== 'undefined') {
+      window.location.href = '/admin/projects';
+    }
   };
+
+  // Eğer slug yoksa proje seçim listesi göster
+  if (!slug && projects.length > 0) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <SafeLink
+            href="/admin/projects"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-4"
+          >
+            <X className="w-5 h-5" />
+            Geri Dön
+          </SafeLink>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Proje Düzenle</h1>
+          <p className="text-gray-600">Düzenlemek istediğiniz projeyi seçin</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-md p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {projects.map((project) => (
+              <SafeLink
+                key={project.slug}
+                href={`/admin/projects/edit?slug=${project.slug}`}
+                className="block p-4 border border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-colors"
+              >
+                <h3 className="font-bold text-gray-900 mb-1">{project.title}</h3>
+                <p className="text-sm text-gray-600 line-clamp-2">{project.description}</p>
+              </SafeLink>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!formData) {
     return (

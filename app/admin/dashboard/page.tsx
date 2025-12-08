@@ -134,7 +134,7 @@ export default function AdminDashboard() {
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-2">
                       <SafeLink
-                        href={`/admin/projects/edit/${project.slug}`}
+                        href={`/admin/projects/edit?slug=${project.slug}`}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Düzenle"
                       >

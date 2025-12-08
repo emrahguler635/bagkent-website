@@ -108,13 +108,13 @@ export default function AdminProjectsPage() {
               <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">{project.title}</h3>
               <p className="text-gray-600 text-sm line-clamp-3 mb-4">{project.description}</p>
               <div className="flex items-center gap-2">
-                <SafeLink
-                  href={`/admin/projects/edit/${project.slug}`}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-                >
-                  <Edit className="w-4 h-4" />
-                  Düzenle
-                </SafeLink>
+                  <SafeLink
+                    href={`/admin/projects/edit?slug=${project.slug}`}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  >
+                    <Edit className="w-4 h-4" />
+                    Düzenle
+                  </SafeLink>
                 <button
                   onClick={() => handleDelete(project.slug)}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"

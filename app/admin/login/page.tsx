@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Lock, LogIn } from 'lucide-react';
 
@@ -9,7 +8,6 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   // Basit şifre kontrolü (production'da daha güvenli bir yöntem kullanılmalı)
   const ADMIN_PASSWORD = 'bagkent2024'; // Bu şifreyi değiştirmeyi unutmayın!
@@ -25,8 +23,8 @@ export default function AdminLoginPage() {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('admin_authenticated', 'true');
         sessionStorage.setItem('admin_login_time', Date.now().toString());
+        window.location.href = '/admin/dashboard';
       }
-      router.push('/admin/dashboard');
     } else {
       setError('Hatalı şifre! Lütfen tekrar deneyin.');
       setLoading(false);
