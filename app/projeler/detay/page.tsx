@@ -1,27 +1,51 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { getProjectBySlug, Project } from '@/lib/projects-data';
 import ProjectDetailClient from '../project-detail-client';
 import SafeLink from '@/components/safe-link';
 import { ArrowLeft } from 'lucide-react';
 
+// Query parametresini parse et
+function getQueryParam(name: string): string | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
 export default function ProjectDetailPage() {
-  const searchParams = useSearchParams();
-  const slug = searchParams?.get('slug');
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [slug, setSlug] = useState<string | null>(null);
 
   useEffect(() => {
-    if (slug) {
-      const foundProject = getProjectBySlug(slug);
+    // Query parametresini al
+    const querySlug = getQueryParam('slug');
+    setSlug(querySlug);
+    
+    if (querySlug) {
+      const foundProject = getProjectBySlug(querySlug);
       setProject(foundProject);
       setLoading(false);
     } else {
       setLoading(false);
     }
-  }, [slug]);
+
+    // URL değişikliklerini dinle (query string değiştiğinde)
+    const handleLocationChange = () => {
+      const newSlug = getQueryParam('slug');
+      setSlug(newSlug);
+      if (newSlug) {
+        const foundProject = getProjectBySlug(newSlug);
+        setProject(foundProject);
+      } else {
+        setProject(null);
+      }
+    };
+    
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
 
   if (loading) {
     return (
