@@ -74,7 +74,6 @@ export default function ProjectsPage() {
                 description={project.description}
                 image={project.image}
                 category={project.category}
-                fullProject={project}
                 delay={index * 0.1} 
               />
             ))}
