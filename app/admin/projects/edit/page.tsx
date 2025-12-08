@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Save, X } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { getAllProjectsWithImages, getProjectBySlug, Project } from '@/lib/projects-data';
+import { getBasePath } from '@/lib/getBasePath';
 
 export default function EditProjectPage() {
   const [slug, setSlug] = useState('');

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Save, X } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { Project } from '@/lib/projects-data';
+import { getBasePath } from '@/lib/getBasePath';
 
 export default function NewProjectPage() {
   const [formData, setFormData] = useState<Omit<Project, 'image'> & { image: string }>({
@@ -55,7 +56,8 @@ export default function NewProjectPage() {
     alert('Proje taslağı kaydedildi!\n\nNot: Gerçek kaydetme için lib/projects-data.ts dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nProje JSON:\n' + projectJSON);
     
     if (typeof window !== 'undefined') {
-      window.location.href = '/admin/projects';
+      const basePath = getBasePath();
+      window.location.href = `${basePath}/admin/projects`;
     }
   };
 

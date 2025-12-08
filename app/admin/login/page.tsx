@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, LogIn } from 'lucide-react';
+import { getBasePath } from '@/lib/getBasePath';
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
@@ -23,7 +24,11 @@ export default function AdminLoginPage() {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('admin_authenticated', 'true');
         sessionStorage.setItem('admin_login_time', Date.now().toString());
-        window.location.href = '/admin/dashboard';
+        
+        // BasePath ile redirect yap
+        const basePath = getBasePath();
+        const dashboardUrl = `${basePath}/admin/dashboard`;
+        window.location.href = dashboardUrl;
       }
     } else {
       setError('Hatalı şifre! Lütfen tekrar deneyin.');

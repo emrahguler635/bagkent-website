@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { LogOut, Home, FileText } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
+import { getBasePath } from '@/lib/getBasePath';
 
 export default function AdminLayout({
   children,
@@ -61,10 +62,12 @@ export default function AdminLayout({
           } else {
             sessionStorage.removeItem('admin_authenticated');
             sessionStorage.removeItem('admin_login_time');
-            window.location.href = '/admin/login';
+            const basePath = getBasePath();
+            window.location.href = `${basePath}/admin/login`;
           }
         } else {
-          window.location.href = '/admin/login';
+          const basePath = getBasePath();
+          window.location.href = `${basePath}/admin/login`;
         }
         setChecking(false);
       }
@@ -77,7 +80,8 @@ export default function AdminLayout({
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('admin_authenticated');
       sessionStorage.removeItem('admin_login_time');
-      window.location.href = '/admin/login';
+      const basePath = getBasePath();
+      window.location.href = `${basePath}/admin/login`;
     }
   };
 
