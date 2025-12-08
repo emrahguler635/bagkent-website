@@ -4,38 +4,18 @@ import HeroSection from '@/components/hero-section';
 import ProjectCard from '@/components/project-card';
 import FeatureCard from '@/components/feature-card';
 import { Building2, Shield, Users, Wrench, TrendingUp, HeartHandshake } from 'lucide-react';
-import Link from 'next/link';
+import SafeLink from '@/components/safe-link';
 import { motion } from 'framer-motion';
 import { useImagePath } from '@/hooks/useImagePath';
+import { getAllProjectsWithImages } from '@/lib/projects-data';
 
 export default function Home() {
   const homepageAboutImage = useImagePath("/homepage-about.jpeg");
   
-  // Projeler sayfasındaki ilk 3 projeyi kullan
-  const project1Image = useImagePath('/homepage-about.jpeg');
-  const project2Image = useImagePath('/park-yesil-alan.jpg');
-  const project3Image = useImagePath('/kultur-tesis.jpg');
-
-  const projects = [
-    {
-      title: 'Bağcılar Kentsel Dönüşüm Projeleri',
-      description: 'Bağcılar ilçesinde deprem güvenliği ve modern mimari standartlarına uygun kentsel dönüşüm projeleri gerçekleştirilmektedir.',
-      image: project1Image,
-      category: 'Konut',
-    },
-    {
-      title: 'Bağcılar Park ve Yeşil Alan Projeleri',
-      description: 'İlçe genelinde yaşam kalitesini artırmak amacıyla kapsamlı park ve yeşil alan projeleri hayata geçirilmektedir.',
-      image: project2Image,
-      category: 'Altyapı',
-    },
-    {
-      title: 'Bağcılar Kültür ve Sosyal Tesis Projeleri',
-      description: 'Bağcılar\'da kültürel ve sosyal yaşamı destekleyen modern tesisler inşa edilmektedir.',
-      image: project3Image,
-      category: 'Ticari',
-    },
-  ];
+  // Merkezi veri kaynağından ilk 3 projeyi al
+  // Görseller ProjectCard component'i içinde işlenecek
+  const allProjects = getAllProjectsWithImages();
+  const projects = allProjects.slice(0, 3);
 
   const features = [
     {
@@ -176,16 +156,24 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {projects.map((project, index) => (
-              <ProjectCard key={index} {...project} delay={index * 0.1} />
+              <ProjectCard 
+                key={project.slug} 
+                slug={project.slug}
+                title={project.title}
+                description={project.description}
+                image={project.image}
+                category={project.category}
+                delay={index * 0.1} 
+              />
             ))}
           </div>
           <div className="text-center">
-            <Link
+            <SafeLink
               href="/projeler"
               className="inline-flex items-center px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg"
             >
               Tüm Projeleri Görüntüle
-            </Link>
+            </SafeLink>
           </div>
         </div>
       </section>
