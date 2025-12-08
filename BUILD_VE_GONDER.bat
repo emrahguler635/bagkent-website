@@ -10,13 +10,27 @@ echo.
 REM Proje klasörüne git
 cd /d "%~dp0"
 
+REM Mevcut dizini göster
+echo Mevcut dizin: %CD%
+echo.
+pause
+
 :: Adım 1: Node modüllerini kontrol et
 echo [1/6] Node modülleri kontrol ediliyor...
 if not exist "node_modules\" (
     echo Node modülleri bulunamadı, yükleniyor...
+    echo.
     call yarn install
-    if %errorlevel% neq 0 (
-        echo [HATA] Yarn install başarısız!
+    set INSTALL_ERROR=%errorlevel%
+    if %INSTALL_ERROR% neq 0 (
+        echo.
+        echo [HATA] Yarn install başarısız! Hata kodu: %INSTALL_ERROR%
+        echo.
+        echo Lütfen:
+        echo - Internet bağlantınızı kontrol edin
+        echo - yarn kurulu mu kontrol edin (yarn --version)
+        echo - node_modules klasörünü silip tekrar deneyin
+        echo.
         pause
         exit /b 1
     )
@@ -39,16 +53,19 @@ echo [3/6] Next.js build yapılıyor (static export)...
 echo Bu işlem birkaç dakika sürebilir...
 echo.
 call yarn build
-if %errorlevel% neq 0 (
+set BUILD_ERROR=%errorlevel%
+if %BUILD_ERROR% neq 0 (
     echo.
     echo ========================================
     echo   [HATA] BUILD BAŞARISIZ!
     echo ========================================
+    echo Hata kodu: %BUILD_ERROR%
     echo.
-    echo Build hatası var. Lütfen hataları kontrol edin:
+    echo Build hatası var. Lütfen yukarıdaki hata mesajlarını kontrol edin:
     echo - TypeScript hataları
     echo - Import/export sorunları
     echo - Eksik dosyalar
+    echo - Syntax hataları
     echo.
     echo Hataları düzelttikten sonra tekrar deneyin.
     echo.
