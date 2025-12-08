@@ -35,7 +35,11 @@ jobs:
         run: yarn install --network-timeout 100000
 
       - name: Build with Next.js
-        run: yarn build
+        run: |
+          echo "=== Build başlıyor ==="
+          echo "NEXT_OUTPUT_MODE: export"
+          echo "GITHUB_REPOSITORY: ${{ github.repository }}"
+          yarn build 2>&1 | tee build.log || (echo "=== BUILD HATASI ===" && cat build.log && exit 1)
         env:
           NEXT_OUTPUT_MODE: export
           NODE_ENV: production
