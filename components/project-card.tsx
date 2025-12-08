@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 import { useImagePath } from '@/hooks/useImagePath';
 import { Project } from '@/lib/projects-data';
 

@@ -76,12 +76,12 @@ export default function Home() {
                 kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite
                 anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.
               </p>
-              <Link
+              <SafeLink
                 href="/kurumsal/hakkimizda"
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg"
               >
                 Daha Fazla Bilgi
-              </Link>
+              </SafeLink>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
@@ -206,12 +206,12 @@ export default function Home() {
             <p className="text-xl text-blue-100 mb-8">
               Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız.
             </p>
-            <Link
+            <SafeLink
               href="/iletisim"
               className="inline-flex items-center px-8 py-4 bg-white text-blue-900 rounded-lg font-bold hover:bg-blue-50 transition-colors shadow-xl text-lg"
             >
               Hemen İletişime Geçin
-            </Link>
+            </SafeLink>
           </motion.div>
         </div>
       </section>
