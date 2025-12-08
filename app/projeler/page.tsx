@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import ProjectCard from '@/components/project-card';
 import SafeLink from '@/components/safe-link';
 import { Building2, Home, Store, Hammer } from 'lucide-react';
-import { useProjects } from '@/hooks/useProjects';
+import { getAllProjectsWithImages } from '@/lib/projects-data';
 
 export default function ProjectsPage() {
   // Projeleri al
-  const { projects } = useProjects();
+  const projects = getAllProjectsWithImages();
 
   const categories = [
     { name: 'Tümü', icon: Building2, count: projects.length },

@@ -7,13 +7,13 @@ import { Building2, Shield, Users, Wrench, TrendingUp, HeartHandshake } from 'lu
 import SafeLink from '@/components/safe-link';
 import { motion } from 'framer-motion';
 import { useImagePath } from '@/hooks/useImagePath';
-import { useProjects } from '@/hooks/useProjects';
+import { getAllProjectsWithImages } from '@/lib/projects-data';
 
 export default function Home() {
   const homepageAboutImage = useImagePath("/homepage-about.jpeg");
   
   // Projeleri al - ilk 3'ünü göster
-  const { projects: allProjects } = useProjects();
+  const allProjects = getAllProjectsWithImages();
   const projects = allProjects.slice(0, 3);
 
   const features = [
