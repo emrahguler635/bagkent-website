@@ -80,9 +80,17 @@ export default function EditManagementPage() {
     e.preventDefault();
     setSaving(true);
 
-    // localStorage'a kaydet
+    // localStorage'a kaydet - UTF-8 encoding ile
     if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_page_management', JSON.stringify(formData));
+      try {
+        // JSON.stringify otomatik olarak UTF-8 kullanır, ancak emin olmak için:
+        const jsonString = JSON.stringify(formData, null, 2);
+        localStorage.setItem('admin_page_management', jsonString);
+      } catch (e) {
+        console.error('Failed to save to localStorage:', e);
+        alert('Kaydetme hatası: ' + (e as Error).message);
+        return;
+      }
     }
 
     const contentJSON = JSON.stringify(formData, null, 2);
