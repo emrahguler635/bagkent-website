@@ -85,7 +85,8 @@ export default function EditProjectPage() {
     alert('Proje düzenlemesi kaydedildi!\n\nNot: Gerçek kaydetme için lib/projects-data.ts dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nDüzenlenen Proje JSON:\n' + projectJSON);
     
     if (typeof window !== 'undefined') {
-      window.location.href = '/admin/projects';
+      const basePath = getBasePath();
+      window.location.href = `${basePath}/admin/projects`;
     }
   };
 
