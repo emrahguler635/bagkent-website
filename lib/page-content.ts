@@ -74,6 +74,10 @@ const defaultContents: Record<string, any> = {
     workHoursSunday: 'Pazar: Kapalı',
     ctaTitle: 'Ofisimizi Ziyaret Edin',
     ctaText: 'Randevu alarak ofisimizi ziyaret edebilir, projeleriniz hakkında detaylı görüşme yapabilirsiniz. Sizi aramızda görmekten mutluluk duyarız.',
+    facebookUrl: '',
+    twitterUrl: '',
+    linkedinUrl: '',
+    instagramUrl: '',
   },
   projects: {
     heroTitle: 'Projelerimiz',

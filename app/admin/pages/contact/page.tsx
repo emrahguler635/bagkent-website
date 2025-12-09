@@ -17,6 +17,10 @@ const defaultFormData = {
     workHoursSunday: 'Pazar: Kapalı',
     ctaTitle: 'Ofisimizi Ziyaret Edin',
     ctaText: 'Randevu alarak ofisimizi ziyaret edebilir, projeleriniz hakkında detaylı görüşme yapabilirsiniz. Sizi aramızda görmekten mutluluk duyarız.',
+    facebookUrl: '',
+    twitterUrl: '',
+    linkedinUrl: '',
+    instagramUrl: '',
 };
 
 export default function EditContactPage() {
@@ -234,6 +238,65 @@ export default function EditContactPage() {
                 value={formData.ctaText}
                 onChange={(e) => setFormData({ ...formData, ctaText: e.target.value })}
                 rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t pt-6">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Sosyal Medya Hesapları</h3>
+          <p className="text-sm text-gray-600 mb-4">Sosyal medya hesaplarınızın linklerini girin. Linkler footer'da görünecektir.</p>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Facebook URL
+              </label>
+              <input
+                type="url"
+                value={formData.facebookUrl}
+                onChange={(e) => setFormData({ ...formData, facebookUrl: e.target.value })}
+                placeholder="https://www.facebook.com/bagkent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Twitter URL
+              </label>
+              <input
+                type="url"
+                value={formData.twitterUrl}
+                onChange={(e) => setFormData({ ...formData, twitterUrl: e.target.value })}
+                placeholder="https://twitter.com/bagkent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                LinkedIn URL
+              </label>
+              <input
+                type="url"
+                value={formData.linkedinUrl}
+                onChange={(e) => setFormData({ ...formData, linkedinUrl: e.target.value })}
+                placeholder="https://www.linkedin.com/company/bagkent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Instagram URL
+              </label>
+              <input
+                type="url"
+                value={formData.instagramUrl}
+                onChange={(e) => setFormData({ ...formData, instagramUrl: e.target.value })}
+                placeholder="https://www.instagram.com/bagkent"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>

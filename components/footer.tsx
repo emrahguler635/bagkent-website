@@ -1,13 +1,63 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import SafeLink from './safe-link';
 import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { useImagePath } from '@/hooks/useImagePath';
+import { getPageContent } from '@/lib/page-content';
 
 const Footer = () => {
   const currentYear = 2025;
   const bagkentLogoPath = useImagePath("/bagkent-logo.png");
   const belediyeLogoPath = useImagePath("/bagcilar-belediyesi-logo.png");
+  const [socialLinks, setSocialLinks] = useState({
+    facebookUrl: '',
+    twitterUrl: '',
+    linkedinUrl: '',
+    instagramUrl: '',
+  });
+
+  // localStorage'dan sosyal medya linklerini yükle
+  useEffect(() => {
+    const updateSocialLinks = () => {
+      const content = getPageContent('contact');
+      setSocialLinks({
+        facebookUrl: content.facebookUrl || '',
+        twitterUrl: content.twitterUrl || '',
+        linkedinUrl: content.linkedinUrl || '',
+        instagramUrl: content.instagramUrl || '',
+      });
+    };
+
+    // İlk yükleme
+    updateSocialLinks();
+
+    // Storage değişikliklerini dinle
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_page_contact') {
+        updateSocialLinks();
+      }
+    };
+
+    // Custom event dinle
+    const handleLocalStorageUpdated = (e: CustomEvent) => {
+      if (e.detail?.key === 'admin_page_contact') {
+        updateSocialLinks();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+
+    // Her 500ms'de bir kontrol et
+    const interval = setInterval(updateSocialLinks, 500);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <footer className="bg-slate-900 text-white">
@@ -96,34 +146,66 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Bizi Takip Edin</h4>
             <div className="flex space-x-3 mb-6">
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
+              {socialLinks.facebookUrl ? (
+                <a
+                  href={socialLinks.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center opacity-50 cursor-not-allowed" aria-label="Facebook (Henüz eklenmedi)">
+                  <Facebook className="w-5 h-5" />
+                </div>
+              )}
+              {socialLinks.twitterUrl ? (
+                <a
+                  href={socialLinks.twitterUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
+                  aria-label="Twitter"
+                >
+                  <Twitter className="w-5 h-5" />
+                </a>
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center opacity-50 cursor-not-allowed" aria-label="Twitter (Henüz eklenmedi)">
+                  <Twitter className="w-5 h-5" />
+                </div>
+              )}
+              {socialLinks.linkedinUrl ? (
+                <a
+                  href={socialLinks.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center opacity-50 cursor-not-allowed" aria-label="LinkedIn (Henüz eklenmedi)">
+                  <Linkedin className="w-5 h-5" />
+                </div>
+              )}
+              {socialLinks.instagramUrl ? (
+                <a
+                  href={socialLinks.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center opacity-50 cursor-not-allowed" aria-label="Instagram (Henüz eklenmedi)">
+                  <Instagram className="w-5 h-5" />
+                </div>
+              )}
             </div>
             
             {/* Partner Logos */}
