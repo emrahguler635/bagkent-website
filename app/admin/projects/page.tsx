@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Eye, Search } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { getAllProjectsWithImages, Project } from '@/lib/projects-data';
-import Image from 'next/image';
 import { useImagePath } from '@/hooks/useImagePath';
+import { getBasePath } from '@/lib/getBasePath';
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -14,15 +14,30 @@ export default function AdminProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
 
   useEffect(() => {
-    setProjects(getAllProjectsWithImages());
+    try {
+      const allProjects = getAllProjectsWithImages();
+      setProjects(allProjects);
+    } catch (error) {
+      console.error('Projeler yüklenirken hata:', error);
+      setProjects([]);
+    }
   }, []);
+  
+  // getImagePath utility fonksiyonu - hook kullanmadan
+  const getImagePath = (imagePath: string): string => {
+    if (!imagePath) return '/placeholder.jpg';
+    if (imagePath.startsWith('http')) return imagePath;
+    const basePath = getBasePath();
+    return `${basePath}${imagePath.startsWith('/') ? imagePath : '/' + imagePath}`;
+  };
 
   const categories = ['Tümü', 'Konut', 'Ticari', 'Altyapı', 'Kurumsal'];
 
   const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'Tümü' || project.category === selectedCategory;
+    if (!project) return false;
+    const matchesSearch = (project.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (project.description || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'Tümü' || (project.category || '') === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -91,16 +106,19 @@ export default function AdminProjectsPage() {
             transition={{ delay: index * 0.05 }}
             className="bg-white rounded-xl shadow-md overflow-hidden"
           >
-            <div className="relative h-48">
-              <Image
-                src={useImagePath(project.image)}
+            <div className="relative h-48 bg-gray-200">
+              <img
+                src={getImagePath(project.image || '/placeholder.jpg')}
                 alt={project.title}
-                fill
-                className="object-cover"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Resim yüklenemezse placeholder göster
+                  (e.target as HTMLImageElement).src = `${getBasePath()}/placeholder.jpg`;
+                }}
               />
               <div className="absolute top-4 left-4">
                 <span className="px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-full">
-                  {project.category}
+                  {project.category || 'Genel'}
                 </span>
               </div>
             </div>
