@@ -3,8 +3,50 @@
 import { motion } from 'framer-motion';
 import { Target, Eye, Compass, TrendingUp } from 'lucide-react';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { getPageContent } from '@/lib/page-content';
 
 export default function MissionVisionPage() {
+  const [content, setContent] = useState(getPageContent('mission'));
+
+  // localStorage'dan güncellemeleri dinle
+  useEffect(() => {
+    const updateContent = () => {
+      const newContent = getPageContent('mission');
+      setContent(newContent);
+    };
+    
+    // İlk yükleme
+    updateContent();
+    
+    // Storage değişikliklerini dinle (farklı tab'lardan)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_page_mission') {
+        updateContent();
+      }
+    };
+    
+    // Custom event dinle (aynı sayfadan)
+    const handleLocalStorageUpdated = (e: CustomEvent) => {
+      if (e.detail?.key === 'admin_page_mission') {
+        updateContent();
+      }
+    };
+    
+    // Event listener'ları ekle
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+    
+    // Her 500ms'de bir kontrol et
+    const interval = setInterval(updateContent, 500);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <div className="pt-20">
       {/* Hero Section */}
@@ -19,9 +61,9 @@ export default function MissionVisionPage() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Misyon ve Vizyonumuz</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{content.heroTitle || 'Misyon ve Vizyonumuz'}</h1>
             <p className="text-xl text-blue-100">
-              Geleceği inşa ederken değerlerimizden ödün vermeden ilerliyoruz.
+              {content.heroSubtitle || 'Geleceği inşa ederken değerlerimizden ödün vermeden ilerliyoruz.'}
             </p>
           </motion.div>
         </div>
@@ -41,23 +83,17 @@ export default function MissionVisionPage() {
                 <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mr-4">
                   <Target className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Misyonumuz</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">{content.missionTitle || 'Misyonumuz'}</h2>
               </div>
               <p className="text-gray-600 leading-relaxed mb-4">
-                BağKent A.Ş. olarak misyonumuz, kaliteli ve sürdürülebilir inşaat projeleri ile
-                müşterilerimizin hayallerini gerçeğe dönüştürmektir. Modern mimari anlayışı,
-                yenilikçi teknolojileri ve çevre dostu uygulamaları bir araya getirerek, yaşam
-                alanlarına değer katmayı hedefliyoruz.
+                {content.missionText1 || 'BağKent A.Ş. olarak misyonumuz, kaliteli ve sürdürülebilir inşaat projeleri ile müşterilerimizin hayallerini gerçeğe dönüştürmektir. Modern mimari anlayışı, yenilikçi teknolojileri ve çevre dostu uygulamaları bir araya getirerek, yaşam alanlarına değer katmayı hedefliyoruz.'}
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Her projede en yüksek kalite standartlarını koruyarak, güvenli ve dayanıklı yapılar
-                inşa etmekteyiz. Müşteri memnuniyetini ön planda tutarak, şeffaf ve dürüst bir
-                iş anlayışı ile hareket ediyoruz.
+                {content.missionText2 || 'Her projede en yüksek kalite standartlarını koruyarak, güvenli ve dayanıklı yapılar inşa etmekteyiz. Müşteri memnuniyetini ön planda tutarak, şeffaf ve dürüst bir iş anlayışı ile hareket ediyoruz.'}
               </p>
               <div className="bg-blue-50 rounded-xl p-6 border-l-4 border-blue-600">
                 <p className="text-gray-700 font-medium italic">
-                  "Kaliteli yapılar inşa ederek topluma ve çevreye değer katmak, güvenilir ve
-                  yenilikçi çözümler sunarak sektörün öncü firması olmak."
+                  "{content.missionQuote || 'Kaliteli yapılar inşa ederek topluma ve çevreye değer katmak, güvenilir ve yenilikçi çözümler sunarak sektörün öncü firması olmak.'}"
                 </p>
               </div>
             </motion.div>

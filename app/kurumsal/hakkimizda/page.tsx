@@ -3,11 +3,51 @@
 import { motion } from 'framer-motion';
 import { Building2, Users, Award, Target, Lightbulb, Shield } from 'lucide-react';
 import { useImagePath } from '@/hooks/useImagePath';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { getPageContent } from '@/lib/page-content';
 
 export default function AboutPage() {
+  const [content, setContent] = useState(getPageContent('about'));
   const heroImagePath = useImagePath("/hakkimizda-hero.jpeg");
   const teamImagePath = useImagePath("/hakkimizda-team.jpeg");
+
+  // localStorage'dan güncellemeleri dinle
+  useEffect(() => {
+    const updateContent = () => {
+      const newContent = getPageContent('about');
+      setContent(newContent);
+    };
+    
+    // İlk yükleme
+    updateContent();
+    
+    // Storage değişikliklerini dinle (farklı tab'lardan)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_page_about') {
+        updateContent();
+      }
+    };
+    
+    // Custom event dinle (aynı sayfadan)
+    const handleLocalStorageUpdated = (e: CustomEvent) => {
+      if (e.detail?.key === 'admin_page_about') {
+        updateContent();
+      }
+    };
+    
+    // Event listener'ları ekle
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+    
+    // Her 500ms'de bir kontrol et
+    const interval = setInterval(updateContent, 500);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Görselleri önceden yükle (preload)
   useEffect(() => {
@@ -77,9 +117,9 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Hakkımızda</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{content.heroTitle || 'Hakkımızda'}</h1>
             <p className="text-xl text-blue-100">
-              30 yılı aşkın deneyimimizle inşaat sektöründe güvenilir ve kaliteli hizmetin adresi.
+              {content.heroSubtitle || '30 yılı aşkın deneyimimizle inşaat sektöründe güvenilir ve kaliteli hizmetin adresi.'}
             </p>
           </motion.div>
         </div>
@@ -95,20 +135,15 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Şirketimizin Hikayesi</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{content.storyTitle || 'Şirketimizin Hikayesi'}</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                BağKent A.Ş., 1990 yılında İstanbul'da kurulmuştur. Kuruluşumuzdan bu yana inşaat
-                sektöründe kalite, güvenilirlik ve müşteri memnuniyeti odaklı hizmet anlayışımızı
-                sürdürmekteyiz.
+                {content.storyText1 || 'BağKent A.Ş., 1990 yılında İstanbul\'da kurulmuştur. Kuruluşumuzdan bu yana inşaat sektöründe kalite, güvenilirlik ve müşteri memnuniyeti odaklı hizmet anlayışımızı sürdürmekteyiz.'}
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Uzman kadromuz, modern teknolojiler ve yenilikçi yaklaşımımızla konut, ticari yapı ve
-                altyapı projelerinde sektörün önde gelen firmalarından biri haline geldik. 250'den
-                fazla başarıyla tamamlanmış projemizle müşterilerimizin güvenini kazandık.
+                {content.storyText2 || 'Uzman kadromuz, modern teknolojiler ve yenilikçi yaklaşımımızla konut, ticari yapı ve altyapı projelerinde sektörün önde gelen firmalarından biri haline geldik. 250\'den fazla başarıyla tamamlanmış projemizle müşterilerimizin güvenini kazandık.'}
               </p>
               <p className="text-gray-600 leading-relaxed">
-                Günümüzde İstanbul ve çevresinde faaliyet gösteren şirketimiz, her geçen gün büyüyen
-                kadrosu ve artan proje portföyüyle sektörde iddialı bir konumda bulunmaktadır.
+                {content.storyText3 || 'Günümüzde İstanbul ve çevresinde faaliyet gösteren şirketimiz, her geçen gün büyüyen kadrosu ve artan proje portföyüyle sektörde iddialı bir konumda bulunmaktadır.'}
               </p>
             </motion.div>
             <motion.div
@@ -223,16 +258,12 @@ export default function AboutPage() {
               viewport={{ once: true }}
             >
               <Users className="w-16 h-16 text-blue-600 mx-auto mb-6" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Ekibimiz</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">{content.teamTitle || 'Ekibimiz'}</h2>
               <p className="text-gray-600 leading-relaxed mb-6">
-                BağKent A.Ş. olarak, alanında uzman mimar, mühendis ve teknik personelden oluşan
-                güçlü bir ekibe sahibiz. Her biri kendi alanında deneyimli profesyonellerden oluşan
-                ekibimiz, projelerin en iyi şekilde tamamlanması için özverili çalışmaktadır.
+                {content.teamText1 || 'BağKent A.Ş. olarak, alanında uzman mimar, mühendis ve teknik personelden oluşan güçlü bir ekibe sahibiz. Her biri kendi alanında deneyimli profesyonellerden oluşan ekibimiz, projelerin en iyi şekilde tamamlanması için özverili çalışmaktadır.'}
               </p>
               <p className="text-gray-600 leading-relaxed">
-                Sürekli eğitim ve gelişim programlarımızla ekip üyelerimizin bilgi ve becerilerini
-                güncel tutuyoruz. Bu sayede sektördeki yenilikleri takip ediyor ve projelerimize
-                en modern çözümleri entegre ediyoruz.
+                {content.teamText2 || 'Sürekli eğitim ve gelişim programlarımızla ekip üyelerimizin bilgi ve becerilerini güncel tutuyoruz. Bu sayede sektördeki yenilikleri takip ediyor ve projelerimize en modern çözümleri entegre ediyoruz.'}
               </p>
             </motion.div>
           </div>

@@ -2,8 +2,50 @@
 
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { getPageContent } from '@/lib/page-content';
 
 export default function ContactPage() {
+  const [content, setContent] = useState(getPageContent('contact'));
+
+  // localStorage'dan güncellemeleri dinle
+  useEffect(() => {
+    const updateContent = () => {
+      const newContent = getPageContent('contact');
+      setContent(newContent);
+    };
+    
+    // İlk yükleme
+    updateContent();
+    
+    // Storage değişikliklerini dinle (farklı tab'lardan)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_page_contact') {
+        updateContent();
+      }
+    };
+    
+    // Custom event dinle (aynı sayfadan)
+    const handleLocalStorageUpdated = (e: CustomEvent) => {
+      if (e.detail?.key === 'admin_page_contact') {
+        updateContent();
+      }
+    };
+    
+    // Event listener'ları ekle
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+    
+    // Her 500ms'de bir kontrol et
+    const interval = setInterval(updateContent, 500);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <div className="pt-20">
       {/* Hero Section */}
@@ -18,9 +60,9 @@ export default function ContactPage() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">İletişim</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{content.heroTitle || 'İletişim'}</h1>
             <p className="text-xl text-blue-100">
-              Projeleriniz için bizimle iletişime geçin. Size en kısa sürede dönüş yapacağız.
+              {content.heroSubtitle || 'Projeleriniz için bizimle iletişime geçin. Size en kısa sürede dönüş yapacağız.'}
             </p>
           </motion.div>
         </div>
@@ -46,10 +88,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Telefon</h3>
                     <a
-                      href="tel:02124100600"
+                      href={`tel:${content.phone?.replace(/\s/g, '') || '02124100600'}`}
                       className="text-blue-600 hover:text-blue-700 transition-colors text-lg"
                     >
-                      0212 410 06 00
+                      {content.phone || '0212 410 06 00'}
                     </a>
                   </div>
                 </div>
@@ -61,10 +103,10 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">E-posta</h3>
                     <a
-                      href="mailto:bagkent@bagkent.com.tr"
+                      href={`mailto:${content.email || 'bagkent@bagkent.com.tr'}`}
                       className="text-blue-600 hover:text-blue-700 transition-colors text-lg"
                     >
-                      bagkent@bagkent.com.tr
+                      {content.email || 'bagkent@bagkent.com.tr'}
                     </a>
                   </div>
                 </div>
@@ -75,10 +117,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Adres</h3>
-                    <p className="text-gray-600">
-                      Güneşli Mah. Mahmutbey Cad. No:97<br />
-                      Bağcılar/İSTANBUL
-                    </p>
+                    <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: (content.address || 'Güneşli Mah. Mahmutbey Cad. No:97<br />Bağcılar/İSTANBUL').replace(/\n/g, '<br />') }} />
                   </div>
                 </div>
 
@@ -88,11 +127,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Çalışma Saatleri</h3>
-                    <p className="text-gray-600">
-                      Pazartesi - Cuma: 09:00 - 18:00<br />
-                      Cumartesi: 09:00 - 14:00<br />
-                      Pazar: Kapalı
-                    </p>
+                    <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: (content.workingHours || 'Pazartesi - Cuma: 09:00 - 18:00\nCumartesi: 09:00 - 14:00\nPazar: Kapalı').replace(/\n/g, '<br />') }} />
                   </div>
                 </div>
               </div>
@@ -140,7 +175,7 @@ export default function ContactPage() {
               yapabilirsiniz. Sizi aramızda görmekten mutluluk duyarız.
             </p>
             <a
-              href="tel:02124100600"
+              href={`tel:${content.phone?.replace(/\s/g, '') || '02124100600'}`}
               className="inline-flex items-center px-8 py-4 bg-white text-blue-900 rounded-lg font-bold hover:bg-blue-50 transition-colors shadow-xl text-lg"
             >
               <Phone className="w-5 h-5 mr-2" />

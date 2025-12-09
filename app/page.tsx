@@ -8,10 +8,51 @@ import SafeLink from '@/components/safe-link';
 import { motion } from 'framer-motion';
 import { useImagePath } from '@/hooks/useImagePath';
 import { getAllProjectsWithImages } from '@/lib/projects-data';
+import { useState, useEffect } from 'react';
+import { getPageContent } from '@/lib/page-content';
 
 export default function Home() {
+  const [content, setContent] = useState(getPageContent('home'));
   const homepageAboutImage = useImagePath("/homepage-about.jpeg");
   
+  // localStorage'dan güncellemeleri dinle
+  useEffect(() => {
+    const updateContent = () => {
+      const newContent = getPageContent('home');
+      setContent(newContent);
+    };
+    
+    // İlk yükleme
+    updateContent();
+    
+    // Storage değişikliklerini dinle (farklı tab'lardan)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_page_home') {
+        updateContent();
+      }
+    };
+    
+    // Custom event dinle (aynı sayfadan)
+    const handleLocalStorageUpdated = (e: CustomEvent) => {
+      if (e.detail?.key === 'admin_page_home') {
+        updateContent();
+      }
+    };
+    
+    // Event listener'ları ekle
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+    
+    // Her 500ms'de bir kontrol et
+    const interval = setInterval(updateContent, 500);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+      clearInterval(interval);
+    };
+  }, []);
+
   // Projeleri al - ilk 3'ünü göster
   const allProjects = getAllProjectsWithImages();
   const projects = allProjects.slice(0, 3);
@@ -64,17 +105,13 @@ export default function Home() {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                BağKent A.Ş. Hakkında
+                {content.aboutTitle || 'BağKent A.Ş. Hakkında'}
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                BağKent A.Ş., 30 yılı aşkın süredir inşaat sektöründe faaliyet gösteren, güvenilir ve
-                köklü bir firmadır. Modern mimari çözümler, kaliteli işçilik ve müşteri memnuniyeti
-                odaklı yaklaşımımızla İstanbul'un önemli projelerine imza atıyoruz.
+                {content.aboutText1 || 'BağKent A.Ş., 30 yılı aşkın süredir inşaat sektöründe faaliyet gösteren, güvenilir ve köklü bir firmadır. Modern mimari çözümler, kaliteli işçilik ve müşteri memnuniyeti odaklı yaklaşımımızla İstanbul\'un önemli projelerine imza atıyoruz.'}
               </p>
               <p className="text-gray-600 leading-relaxed mb-6">
-                Konut projelerinden ticari yapılara, altyapı çalışmalarından restorasyon projelerine
-                kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite
-                anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.
+                {content.aboutText2 || 'Konut projelerinden ticari yapılara, altyapı çalışmalarından restorasyon projelerine kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.'}
               </p>
               <SafeLink
                 href="/kurumsal/hakkimizda"
@@ -194,18 +231,18 @@ export default function Home() {
               transition={{ delay: 0.1 }}
               className="mb-8"
             >
-              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 tracking-tight leading-tight">
-                <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                  BağKent Sizinle Güzel
-                </span>
-              </h3>
-            </motion.div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Hayalinizdeki Projeyi Birlikte Gerçekleştirelim
-            </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız.
-            </p>
+                  <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 tracking-tight leading-tight">
+                    <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                      {content.slogan || 'BağKent Sizinle Güzel'}
+                    </span>
+                  </h3>
+                </motion.div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  {content.ctaTitle || 'Hayalinizdeki Projeyi Birlikte Gerçekleştirelim'}
+                </h2>
+                <p className="text-xl text-blue-100 mb-8">
+                  {content.ctaText || 'Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız.'}
+                </p>
             <SafeLink
               href="/iletisim"
               className="inline-flex items-center px-8 py-4 bg-white text-blue-900 rounded-lg font-bold hover:bg-blue-50 transition-colors shadow-xl text-lg"
