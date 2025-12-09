@@ -198,23 +198,16 @@ export default function ApplyToWebsitePage() {
         if (!filePath) continue;
 
         try {
-          // Dosyanın mevcut içeriğini al
-          const getFileResponse = await fetch(
-            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filePath}?ref=${BRANCH}`,
-            {
-              headers: {
-                'Authorization': `token ${githubToken}`,
-                'Accept': 'application/vnd.github.v3+json',
-              },
-            }
-          );
-
-          if (!getFileResponse.ok) {
-            throw new Error(`Dosya alınamadı: ${getFileResponse.statusText}`);
-          }
-
-          const fileData = await getFileResponse.json();
-          const sha = fileData.sha;
+          console.log(`📝 İşleniyor: ${pageName} (${filePath})`);
+          
+          // lib/page-content.ts dosyasını güncelle
+          const contentFile = 'lib/page-content.ts';
+          
+          // lib/page-content.ts dosyasını al (sadece bir kez, ilk iterasyonda)
+          let contentFileResponse;
+          let contentFileData;
+          let contentSha;
+          let contentFileContent;
           
           // Base64 decode with proper UTF-8 handling
           const base64ToUtf8 = (str: string) => {
@@ -231,106 +224,143 @@ export default function ApplyToWebsitePage() {
             }
           };
           
-          const currentContent = base64ToUtf8(fileData.content.replace(/\n/g, ''));
-
-          // Dosya içeriğini güncelle
-          // Not: Bu kısım sadece defaultContents'i güncelleyecek şekilde çalışıyor
-          // Gerçek dosya içeriğini güncellemek için daha karmaşık parse mantığı gerekir
-          // Şimdilik sadece lib/page-content.ts dosyasını güncelleyelim
-          
-          // Basit bir yaklaşım: lib/page-content.ts dosyasındaki defaultContents'i güncelle
-          const contentFile = 'lib/page-content.ts';
-          
-          // lib/page-content.ts dosyasını al
-          const contentFileResponse = await fetch(
-            `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}?ref=${BRANCH}`,
-            {
-              headers: {
-                'Authorization': `token ${githubToken}`,
-                'Accept': 'application/vnd.github.v3+json',
-              },
-            }
-          );
-
-          if (contentFileResponse.ok) {
-          const contentFileData = await contentFileResponse.json();
-          const contentSha = contentFileData.sha;
-          
-          // Base64 decode with proper UTF-8 handling for Turkish characters
-          const base64ToUtf8 = (str: string) => {
-            try {
-              return decodeURIComponent(escape(atob(str)));
-            } catch (e) {
-              // Fallback
-              const binary = atob(str);
-              const bytes = new Uint8Array(binary.length);
-              for (let i = 0; i < binary.length; i++) {
-                bytes[i] = binary.charCodeAt(i);
+          // İlk sayfa ise dosyayı al
+          if (pageName === Object.keys(exportData)[0]) {
+            contentFileResponse = await fetch(
+              `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}?ref=${BRANCH}`,
+              {
+                headers: {
+                  'Authorization': `token ${githubToken}`,
+                  'Accept': 'application/vnd.github.v3+json',
+                },
               }
-              return new TextDecoder('utf-8').decode(bytes);
-            }
-          };
-          
-          let contentFileContent = base64ToUtf8(contentFileData.content.replace(/\n/g, ''));
+            );
 
-            // defaultContents objesini güncelle
-            const pageType = pageName as keyof typeof fileMap;
-            const dataStr = JSON.stringify(data, null, 4).replace(/'/g, "\\'");
+            if (!contentFileResponse.ok) {
+              throw new Error(`lib/page-content.ts dosyası alınamadı: ${contentFileResponse.statusText}`);
+            }
+
+            contentFileData = await contentFileResponse.json();
+            contentSha = contentFileData.sha;
+            contentFileContent = base64ToUtf8(contentFileData.content.replace(/\n/g, ''));
             
-            // Basit string replacement (daha iyi bir çözüm için AST parser kullanılabilir)
-            const regex = new RegExp(`(${pageType}:\\s*\\{[^}]*\\})`, 's');
-            if (regex.test(contentFileContent)) {
-              contentFileContent = contentFileContent.replace(
-                regex,
-                `${pageType}: ${dataStr.replace(/'/g, "\\'")}`
-              );
-
-              // Güncellenmiş içeriği GitHub'a yükle
-              // UTF-8 encoding için doğru base64 encoding
-              const utf8ToBase64 = (str: string) => {
-                try {
-                  return btoa(unescape(encodeURIComponent(str)));
-                } catch (e) {
-                  // Fallback: manuel UTF-8 encoding
-                  const utf8 = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
-                    return String.fromCharCode(parseInt(p1, 16));
-                  });
-                  return btoa(utf8);
-                }
-              };
-
-              const updateResponse = await fetch(
-                `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}`,
-                {
-                  method: 'PUT',
-                  headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json; charset=utf-8',
-                  },
-                  body: JSON.stringify({
-                    message: `Admin panelinden ${pageName} sayfası güncellendi`,
-                    content: utf8ToBase64(contentFileContent),
-                    sha: contentSha,
-                    branch: BRANCH,
-                  }),
-                }
-              );
-
-              if (updateResponse.ok) {
-                results.push({ file: contentFile, success: true, message: 'Güncellendi' });
-              } else {
-                const errorData = await updateResponse.json();
-                throw new Error(errorData.message || 'Güncelleme başarısız');
-              }
+            // Global değişken olarak sakla (sonraki iterasyonlar için)
+            (window as any).__contentFileContent = contentFileContent;
+            (window as any).__contentSha = contentSha;
+          } else {
+            // Sonraki iterasyonlar için saklanan içeriği kullan
+            contentFileContent = (window as any).__contentFileContent;
+            contentSha = (window as any).__contentSha;
+            
+            if (!contentFileContent) {
+              throw new Error('lib/page-content.ts içeriği yüklenemedi');
             }
           }
 
-          results.push({ file: filePath, success: true, message: 'İşlendi' });
+          // defaultContents objesini güncelle
+          const pageType = pageName as keyof typeof fileMap;
+          
+          // JSON string'i oluştur - daha güvenli yöntem
+          const formatValue = (value: any): string => {
+            if (typeof value === 'string') {
+              // String için escape işlemleri
+              return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n')}'`;
+            } else if (typeof value === 'object' && value !== null) {
+              // Object için recursive
+              const entries = Object.entries(value).map(([k, v]) => {
+                return `    ${k}: ${formatValue(v)}`;
+              });
+              return `{\n${entries.join(',\n')}\n  }`;
+            }
+            return JSON.stringify(value);
+          };
+          
+          // Daha iyi regex pattern - çok satırlı objeleri yakalayacak
+          // Önce objenin başlangıç ve bitiş satırlarını bul
+          const pageTypePattern = new RegExp(`(${pageType}:\\s*\\{[\\s\\S]*?\\})`, 'm');
+          const match = contentFileContent.match(pageTypePattern);
+          
+          if (!match) {
+            console.warn(`⚠️ ${pageType} için pattern bulunamadı, manuel ekleme deneniyor...`);
+            // Pattern bulunamazsa, defaultContents objesinin sonuna eklemeyi dene
+            const defaultContentsMatch = contentFileContent.match(/(const\s+defaultContents[^=]*=\s*\{)/);
+            if (defaultContentsMatch) {
+              const insertPos = defaultContentsMatch.index! + defaultContentsMatch[0].length;
+              const beforeInsert = contentFileContent.substring(0, insertPos);
+              const afterInsert = contentFileContent.substring(insertPos);
+              
+              // Mevcut objeyi bul ve sonuna ekle
+              const lastBrace = afterInsert.lastIndexOf('}');
+              if (lastBrace !== -1) {
+                const beforeBrace = afterInsert.substring(0, lastBrace);
+                const newEntry = `\n  ${pageType}: ${JSON.stringify(data, null, 2).replace(/\n/g, '\n  ')},\n`;
+                contentFileContent = beforeInsert + beforeBrace + newEntry + afterInsert.substring(lastBrace);
+              } else {
+                throw new Error(`${pageType} için uygun konum bulunamadı`);
+              }
+            } else {
+              throw new Error(`${pageType} için pattern bulunamadı ve defaultContents objesi bulunamadı`);
+            }
+          } else {
+            // Mevcut objeyi güncelle
+            const newObjStr = `${pageType}: ${JSON.stringify(data, null, 2).replace(/\n/g, '\n  ')}`;
+            contentFileContent = contentFileContent.replace(pageTypePattern, newObjStr);
+          }
+
+          // Güncellenmiş içeriği GitHub'a yükle (sadece son sayfada)
+          const isLastPage = pageName === Object.keys(exportData)[Object.keys(exportData).length - 1];
+          
+          if (isLastPage) {
+            // UTF-8 encoding için doğru base64 encoding
+            const utf8ToBase64 = (str: string) => {
+              try {
+                return btoa(unescape(encodeURIComponent(str)));
+              } catch (e) {
+                // Fallback: manuel UTF-8 encoding
+                const utf8 = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+                  return String.fromCharCode(parseInt(p1, 16));
+                });
+                return btoa(utf8);
+              }
+            };
+
+            const updateResponse = await fetch(
+              `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}`,
+              {
+                method: 'PUT',
+                headers: {
+                  'Authorization': `token ${githubToken}`,
+                  'Accept': 'application/vnd.github.v3+json',
+                  'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({
+                  message: `Admin panelinden sayfa içerikleri güncellendi: ${Object.keys(exportData).join(', ')}`,
+                  content: utf8ToBase64(contentFileContent),
+                  sha: contentSha,
+                  branch: BRANCH,
+                }),
+              }
+            );
+
+            if (!updateResponse.ok) {
+              const errorData = await updateResponse.json();
+              throw new Error(`GitHub API hatası: ${errorData.message || updateResponse.statusText}`);
+            }
+            
+            // Başarılı
+            results.push({ file: contentFile, success: true, message: 'Güncellendi' });
+            console.log(`✅ ${contentFile} başarıyla güncellendi`);
+          } else {
+            // Henüz son sayfa değil, sadece içeriği güncelle
+            (window as any).__contentFileContent = contentFileContent;
+            results.push({ file: `${pageName} (hazırlandı)`, success: true, message: 'İşlendi' });
+            console.log(`✓ ${pageName} işlendi (commit bekleniyor)`);
+          }
 
         } catch (error: any) {
+          console.error(`❌ ${pageName} hatası:`, error);
           results.push({
-            file: filePath,
+            file: `${pageName} (${filePath})`,
             success: false,
             message: error.message || 'Bilinmeyen hata',
           });
@@ -340,17 +370,36 @@ export default function ApplyToWebsitePage() {
       const successCount = results.filter(r => r.success).length;
       const failCount = results.filter(r => !r.success).length;
 
+      // Hata detaylarını göster
+      const failedFiles = results.filter(r => !r.success);
+      const successfulFiles = results.filter(r => r.success);
+
       if (successCount > 0) {
+        let message = `✅ ${successCount} dosya başarıyla güncellendi`;
+        if (failCount > 0) {
+          message += `\n\n❌ ${failCount} dosyada hata:\n`;
+          failedFiles.forEach(r => {
+            message += `\n• ${r.file}: ${r.message}`;
+          });
+        }
         setCommitStatus({
-          type: 'success',
-          message: `✅ ${successCount} dosya başarıyla güncellendi${failCount > 0 ? `, ${failCount} dosyada hata` : ''}`
+          type: failCount > 0 ? 'error' : 'success',
+          message: message
         });
       } else {
+        let message = `❌ Tüm dosyalarda hata oluştu:\n`;
+        failedFiles.forEach(r => {
+          message += `\n• ${r.file}: ${r.message}`;
+        });
         setCommitStatus({
           type: 'error',
-          message: `❌ Tüm dosyalarda hata oluştu. Detaylar: ${results.map(r => r.message).join(', ')}`
+          message: message
         });
       }
+      
+      // Console'a da yazdır
+      console.log('✅ Başarılı:', successfulFiles.map(r => r.file));
+      console.log('❌ Hatalı:', failedFiles.map(r => ({ file: r.file, error: r.message })));
 
       // Token kaydet
       localStorage.setItem('github_token', githubToken);
@@ -509,10 +558,17 @@ export default function ApplyToWebsitePage() {
                   Bu işlem dosyaları otomatik olarak güncelleyecek ve GitHub'a push edecektir.
                 </p>
                 {commitStatus && (
-                  <div className={`mb-4 p-4 rounded-lg ${
+                  <div className={`mb-4 p-4 rounded-lg whitespace-pre-line ${
                     commitStatus.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
-                    {commitStatus.message}
+                    <div className="flex items-start gap-2">
+                      {commitStatus.type === 'success' ? (
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      ) : (
+                        <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                      )}
+                      <div className="flex-1 font-mono text-sm">{commitStatus.message}</div>
+                    </div>
                   </div>
                 )}
                 <button
