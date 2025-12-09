@@ -1,14 +1,65 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from '@/components/project-card';
 import SafeLink from '@/components/safe-link';
 import { Building2, Home, Store, Hammer } from 'lucide-react';
-import { getAllProjectsWithImages } from '@/lib/projects-data';
+import { getAllProjectsWithImages, Project } from '@/lib/projects-data';
+import { getPageContent } from '@/lib/page-content';
 
 export default function ProjectsPage() {
-  // Projeleri al
-  const projects = getAllProjectsWithImages();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [content, setContent] = useState<any>(null);
+
+  useEffect(() => {
+    // Sayfa içeriğini yükle
+    const pageContent = getPageContent('projects');
+    setContent(pageContent);
+
+    // Projeleri yükle
+    const loadProjects = () => {
+      try {
+        const allProjects = getAllProjectsWithImages();
+        // localStorage'dan özel projeler varsa onları da ekle
+        if (typeof window !== 'undefined') {
+          const savedProjects = localStorage.getItem('admin_projects_list');
+          if (savedProjects) {
+            try {
+              const parsedProjects = JSON.parse(savedProjects);
+              setProjects([...allProjects, ...parsedProjects]);
+            } catch (e) {
+              setProjects(allProjects);
+            }
+          } else {
+            setProjects(allProjects);
+          }
+        } else {
+          setProjects(allProjects);
+        }
+      } catch (error) {
+        console.error('Projeler yüklenirken hata:', error);
+        setProjects([]);
+      }
+    };
+
+    loadProjects();
+
+    // localStorage değişikliklerini dinle
+    const handleStorageUpdate = () => {
+      loadProjects();
+      const updatedContent = getPageContent('projects');
+      setContent(updatedContent);
+    };
+
+    window.addEventListener('storage', handleStorageUpdate);
+    window.addEventListener('localStorageUpdated', handleStorageUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageUpdate);
+      window.removeEventListener('localStorageUpdated', handleStorageUpdate);
+    };
+  }, []);
 
   const categories = [
     { name: 'Tümü', icon: Building2, count: projects.length },
@@ -16,6 +67,14 @@ export default function ProjectsPage() {
     { name: 'Ticari', icon: Store, count: projects.filter(p => p?.category === 'Ticari').length },
     { name: 'Altyapı', icon: Hammer, count: projects.filter(p => ['Altyapı', 'Kurumsal'].includes(p?.category ?? '')).length },
   ];
+
+  const pageContent = content || {
+    heroTitle: 'Projelerimiz',
+    heroSubtitle: 'Modern mimari anlayışı ve kaliteli işçilikle hayata geçirdiğimiz projelerimizi keşfedin.',
+    ctaTitle: 'Bir Sonraki Proje Sizin Olabilir',
+    ctaText: 'Hayalinizdeki projeyi birlikte hayata geçirelim. Deneyimli ekibimizle sizlere en iyi hizmeti sunmak için buradayız.',
+    ctaButtonText: 'Projeniz İçin Bize Ulaşın',
+  };
 
   return (
     <div className="pt-20">
@@ -31,9 +90,9 @@ export default function ProjectsPage() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl"
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Projelerimiz</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{pageContent.heroTitle}</h1>
             <p className="text-xl text-blue-100">
-              Modern mimari anlayışı ve kaliteli işçilikle hayata geçirdiğimiz projelerimizi keşfedin.
+              {pageContent.heroSubtitle}
             </p>
           </motion.div>
         </div>
@@ -91,17 +150,16 @@ export default function ProjectsPage() {
             className="bg-gradient-to-r from-blue-900 to-blue-700 rounded-3xl p-12 md:p-16 text-center text-white"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Bir Sonraki Proje Sizin Olabilir
+              {pageContent.ctaTitle}
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Hayalinizdeki projeyi birlikte hayata geçirelim. Deneyimli ekibimizle sizlere en iyi
-              hizmeti sunmak için buradayız.
+              {pageContent.ctaText}
             </p>
             <SafeLink
               href="/iletisim"
               className="inline-flex items-center px-8 py-4 bg-white text-blue-900 rounded-lg font-bold hover:bg-blue-50 transition-colors shadow-xl text-lg"
             >
-              Projeniz İçin Bize Ulaşın
+              {pageContent.ctaButtonText}
             </SafeLink>
           </motion.div>
         </div>

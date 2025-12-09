@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Eye, Search } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 import { getAllProjectsWithImages, Project } from '@/lib/projects-data';
-import { useImagePath } from '@/hooks/useImagePath';
 import { getBasePath } from '@/lib/getBasePath';
 
 export default function AdminProjectsPage() {

@@ -67,10 +67,18 @@ const defaultContents: Record<string, any> = {
     ctaTitle: 'Ofisimizi Ziyaret Edin',
     ctaText: 'Randevu alarak ofisimizi ziyaret edebilir, projeleriniz hakkında detaylı görüşme yapabilirsiniz. Sizi aramızda görmekten mutluluk duyarız.',
   },
+  projects: {
+    heroTitle: 'Projelerimiz',
+    heroSubtitle: 'Modern mimari anlayışı ve kaliteli işçilikle hayata geçirdiğimiz projelerimizi keşfedin.',
+    ctaTitle: 'Bir Sonraki Proje Sizin Olabilir',
+    ctaText: 'Hayalinizdeki projeyi birlikte hayata geçirelim. Deneyimli ekibimizle sizlere en iyi hizmeti sunmak için buradayız.',
+    ctaButtonText: 'Projeniz İçin Bize Ulaşın',
+  },
 };
 
 const storageKeys: Record<string, string> = {
   home: 'admin_page_home',
+  projects: 'admin_page_projects',
   about: 'admin_page_about',
   mission: 'admin_page_mission',
   management: 'admin_page_management',

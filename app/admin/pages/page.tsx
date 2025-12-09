@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FileEdit, Home, Building2, Eye, Target, Users, Mail, Download, Upload } from 'lucide-react';
+import { FileEdit, Home, Building2, Eye, Target, Users, Mail, Download, Upload, FolderKanban } from 'lucide-react';
 import SafeLink from '@/components/safe-link';
 
 const pages = [
@@ -12,6 +12,14 @@ const pages = [
     path: '/admin/pages/home',
     icon: Home,
     color: 'bg-blue-500',
+  },
+  {
+    id: 'projects',
+    title: 'Projeler',
+    description: 'Proje listesi ve proje detayları yönetimi',
+    path: '/admin/pages/projects',
+    icon: FolderKanban,
+    color: 'bg-indigo-500',
   },
   {
     id: 'about',

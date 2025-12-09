@@ -5,6 +5,7 @@ import { Download, Copy, FileText, CheckCircle } from 'lucide-react';
 
 const pageKeys = {
   home: 'admin_page_home',
+  projects: 'admin_page_projects',
   about: 'admin_page_about',
   mission: 'admin_page_mission',
   management: 'admin_page_management',

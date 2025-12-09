@@ -7,6 +7,7 @@ import { getBasePath } from '@/lib/getBasePath';
 
 const pageKeys = {
   home: 'admin_page_home',
+  projects: 'admin_page_projects',
   about: 'admin_page_about',
   mission: 'admin_page_mission',
   management: 'admin_page_management',
@@ -15,6 +16,7 @@ const pageKeys = {
 
 const fileMap: Record<string, string> = {
   home: 'app/page.tsx',
+  projects: 'app/projeler/page.tsx',
   about: 'app/kurumsal/hakkimizda/page.tsx',
   mission: 'app/kurumsal/misyon-vizyon/page.tsx',
   management: 'app/kurumsal/yonetim/page.tsx',
