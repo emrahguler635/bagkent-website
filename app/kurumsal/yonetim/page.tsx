@@ -13,24 +13,39 @@ export default function YonetimPage() {
   
   // localStorage'dan güncellemeleri dinle
   useEffect(() => {
-    const handleStorageChange = () => {
-      setContent(getPageContent('management'));
+    const updateContent = () => {
+      const newContent = getPageContent('management');
+      setContent(newContent);
+      console.log('📝 Yönetim sayfası içeriği güncellendi:', newContent);
     };
     
     // İlk yükleme
-    handleStorageChange();
+    updateContent();
     
-    // Storage değişikliklerini dinle
+    // Storage değişikliklerini dinle (farklı tab'lardan)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_page_management') {
+        updateContent();
+      }
+    };
+    
+    // Custom event dinle (aynı sayfadan)
+    const handleLocalStorageUpdated = (e: CustomEvent) => {
+      if (e.detail?.key === 'admin_page_management') {
+        updateContent();
+      }
+    };
+    
+    // Event listener'ları ekle
     window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
     
-    // Aynı sayfa içinde değişiklikler için custom event
-    const interval = setInterval(() => {
-      const newContent = getPageContent('management');
-      setContent(newContent);
-    }, 1000); // Her saniye kontrol et
+    // Her 500ms'de bir kontrol et (daha hızlı güncelleme için)
+    const interval = setInterval(updateContent, 500);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
       clearInterval(interval);
     };
   }, []);

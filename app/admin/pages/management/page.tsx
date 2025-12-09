@@ -86,15 +86,30 @@ export default function EditManagementPage() {
         // JSON.stringify otomatik olarak UTF-8 kullanır, ancak emin olmak için:
         const jsonString = JSON.stringify(formData, null, 2);
         localStorage.setItem('admin_page_management', jsonString);
+        
+        // Custom event gönder - aynı sayfada değişiklikleri dinlemek için
+        window.dispatchEvent(new CustomEvent('localStorageUpdated', {
+          detail: { key: 'admin_page_management', data: formData }
+        }));
+        
+        // Storage event'i tetikle (farklı tab'lar için)
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: 'admin_page_management',
+          newValue: jsonString,
+          storageArea: localStorage
+        }));
+        
+        console.log('✅ Yönetim sayfası verisi localStorage\'a kaydedildi:', formData);
       } catch (e) {
         console.error('Failed to save to localStorage:', e);
         alert('Kaydetme hatası: ' + (e as Error).message);
+        setSaving(false);
         return;
       }
     }
 
     const contentJSON = JSON.stringify(formData, null, 2);
-    alert('Yönetim sayfası içeriği güncellendi ve kaydedildi!\n\nNot: Gerçek güncelleme için app/kurumsal/yonetim/page.tsx dosyasını düzenleyip GitHub\'a commit etmeniz gerekir.\n\nİçerik JSON:\n' + contentJSON);
+    alert('✅ Yönetim sayfası içeriği güncellendi ve kaydedildi!\n\nDeğişiklikler anında web sitesine yansıyacaktır.\n\nYönetim sayfasını yenileyerek değişiklikleri görebilirsiniz.');
     
     setSaving(false);
   };

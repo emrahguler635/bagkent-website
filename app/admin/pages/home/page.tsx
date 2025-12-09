@@ -44,7 +44,12 @@ export default function EditHomePage() {
 
     // localStorage'a kaydet
     if (typeof window !== 'undefined') {
-      localStorage.setItem('admin_page_home', JSON.stringify(formData));
+      const jsonString = JSON.stringify(formData);
+      localStorage.setItem('admin_page_home', jsonString);
+      // Custom event gönder
+      window.dispatchEvent(new CustomEvent('localStorageUpdated', {
+        detail: { key: 'admin_page_home', data: formData }
+      }));
     }
 
     const contentJSON = JSON.stringify(formData, null, 2);
