@@ -192,70 +192,55 @@ export default function ApplyToWebsitePage() {
     try {
       const results: Array<{ file: string; success: boolean; message: string }> = [];
 
-      // Her dosya için güncelleme yap
+      // Önce lib/page-content.ts dosyasını bir kez al
+      const contentFile = 'lib/page-content.ts';
+      console.log('📥 lib/page-content.ts dosyası alınıyor...');
+      
+      const contentFileResponse = await fetch(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}?ref=${BRANCH}`,
+        {
+          headers: {
+            'Authorization': `token ${githubToken}`,
+            'Accept': 'application/vnd.github.v3+json',
+          },
+        }
+      );
+
+      if (!contentFileResponse.ok) {
+        throw new Error(`lib/page-content.ts dosyası alınamadı: ${contentFileResponse.statusText}`);
+      }
+
+      const contentFileData = await contentFileResponse.json();
+      const contentSha = contentFileData.sha;
+      
+      // Base64 decode with proper UTF-8 handling
+      const base64ToUtf8 = (str: string) => {
+        try {
+          return decodeURIComponent(escape(atob(str)));
+        } catch (e) {
+          // Fallback
+          const binary = atob(str);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          return new TextDecoder('utf-8').decode(bytes);
+        }
+      };
+      
+      let contentFileContent = base64ToUtf8(contentFileData.content.replace(/\n/g, ''));
+      console.log('✅ lib/page-content.ts dosyası alındı');
+
+      // Her sayfa için güncelleme yap
       for (const [pageName, data] of Object.entries(exportData)) {
         const filePath = fileMap[pageName];
-        if (!filePath) continue;
+        if (!filePath) {
+          console.warn(`⚠️ ${pageName} için dosya yolu bulunamadı`);
+          continue;
+        }
 
         try {
           console.log(`📝 İşleniyor: ${pageName} (${filePath})`);
-          
-          // lib/page-content.ts dosyasını güncelle
-          const contentFile = 'lib/page-content.ts';
-          
-          // lib/page-content.ts dosyasını al (sadece bir kez, ilk iterasyonda)
-          let contentFileResponse;
-          let contentFileData;
-          let contentSha;
-          let contentFileContent;
-          
-          // Base64 decode with proper UTF-8 handling
-          const base64ToUtf8 = (str: string) => {
-            try {
-              return decodeURIComponent(escape(atob(str)));
-            } catch (e) {
-              // Fallback
-              const binary = atob(str);
-              const bytes = new Uint8Array(binary.length);
-              for (let i = 0; i < binary.length; i++) {
-                bytes[i] = binary.charCodeAt(i);
-              }
-              return new TextDecoder('utf-8').decode(bytes);
-            }
-          };
-          
-          // İlk sayfa ise dosyayı al
-          if (pageName === Object.keys(exportData)[0]) {
-            contentFileResponse = await fetch(
-              `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}?ref=${BRANCH}`,
-              {
-                headers: {
-                  'Authorization': `token ${githubToken}`,
-                  'Accept': 'application/vnd.github.v3+json',
-                },
-              }
-            );
-
-            if (!contentFileResponse.ok) {
-              throw new Error(`lib/page-content.ts dosyası alınamadı: ${contentFileResponse.statusText}`);
-            }
-
-            contentFileData = await contentFileResponse.json();
-            contentSha = contentFileData.sha;
-            contentFileContent = base64ToUtf8(contentFileData.content.replace(/\n/g, ''));
-            
-            // Global değişken olarak sakla (sonraki iterasyonlar için)
-            (window as any).__contentFileContent = contentFileContent;
-            (window as any).__contentSha = contentSha;
-          } else {
-            // Sonraki iterasyonlar için saklanan içeriği kullan
-            contentFileContent = (window as any).__contentFileContent;
-            contentSha = (window as any).__contentSha;
-            
-            if (!contentFileContent) {
-              throw new Error('lib/page-content.ts içeriği yüklenemedi');
-            }
-          }
 
           // defaultContents objesini güncelle
           const pageType = pageName as keyof typeof fileMap;
@@ -365,6 +350,58 @@ export default function ApplyToWebsitePage() {
             message: error.message || 'Bilinmeyen hata',
           });
         }
+      }
+
+      // Tüm sayfalar işlendi, şimdi lib/page-content.ts dosyasını GitHub'a commit et
+      console.log('📤 lib/page-content.ts GitHub\'a yükleniyor...');
+      
+      try {
+        // UTF-8 encoding için doğru base64 encoding
+        const utf8ToBase64 = (str: string) => {
+          try {
+            return btoa(unescape(encodeURIComponent(str)));
+          } catch (e) {
+            // Fallback: manuel UTF-8 encoding
+            const utf8 = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+              return String.fromCharCode(parseInt(p1, 16));
+            });
+            return btoa(utf8);
+          }
+        };
+
+        const updateResponse = await fetch(
+          `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${contentFile}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': `token ${githubToken}`,
+              'Accept': 'application/vnd.github.v3+json',
+              'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify({
+              message: `Admin panelinden sayfa içerikleri güncellendi: ${Object.keys(exportData).join(', ')}`,
+              content: utf8ToBase64(contentFileContent),
+              sha: contentSha,
+              branch: BRANCH,
+            }),
+          }
+        );
+
+        if (!updateResponse.ok) {
+          const errorData = await updateResponse.json();
+          throw new Error(`GitHub API hatası: ${errorData.message || updateResponse.statusText}`);
+        }
+        
+        // Başarılı
+        results.push({ file: contentFile, success: true, message: 'GitHub\'a commit edildi' });
+        console.log(`✅ ${contentFile} başarıyla GitHub'a commit edildi`);
+      } catch (error: any) {
+        console.error(`❌ ${contentFile} commit hatası:`, error);
+        results.push({
+          file: contentFile,
+          success: false,
+          message: error.message || 'GitHub commit hatası',
+        });
       }
 
       const successCount = results.filter(r => r.success).length;
