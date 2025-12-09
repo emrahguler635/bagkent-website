@@ -6,15 +6,15 @@
 // Varsayılan değerler
 const defaultContents: Record<string, any> = {
   home: {
-    heroTitle: 'Geleceği İnşa Eden Güven',
-    heroSubtitle: 'Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.',
-    aboutTitle: 'BağKent A.Ş. Hakkında',
-    aboutText1: 'BağKent A.Ş., 30 yılı aşkın süredir inşaat sektöründe faaliyet gösteren, güvenilir ve köklü bir firmadır. Modern mimari çözümler, kaliteli işçilik ve müşteri memnuniyeti odaklı yaklaşımımızla İstanbul\'un önemli projelerine imza atıyoruz.',
-    aboutText2: 'Konut projelerinden ticari yapılara, altyapı çalışmalarından restorasyon projelerine kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.',
-    slogan: 'BağKent Sizinle Güzel',
-    ctaTitle: 'Hayalinizdeki Projeyi Birlikte Gerçekleştirelim',
-    ctaText: 'Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız.',
-  },
+    "heroTitle": "Geleceği İnşa Eden Güven",
+    "heroSubtitle": "Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.",
+    "aboutTitle": "BağKent A.Ş. Hakkında",
+    "aboutText1": "BağKent A.Ş. 1 yılı aşkın süredir inşaat sektöründe faaliyet gösteren, güvenilir ve köklü bir firmadır. Modern mimari çözümler, kaliteli işçilik ve müşteri memnuniyeti odaklı yaklaşımımızla İstanbul\\'un önemli projelerine imza atıyoruz.",
+    "aboutText2": "Konut projelerinden ticari yapılara, altyapı çalışmalarından restorasyon projelerine kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.",
+    "slogan": "BağKent Sizinle Güzel",
+    "ctaTitle": "Hayalinizdeki Projeyi Birlikte Gerçekleştirelim",
+    "ctaText": "Uzman ekibimiz ve 30 yıllık deneyimimizle projelerinize değer katmaya hazırız."
+},
   about: {
     "heroTitle": "Hakkımızda",
     "heroSubtitle": "30 yılı aşkın deneyimimizle inşaat sektöründe güvenilir ve kaliteli hizmetin adresi.",
