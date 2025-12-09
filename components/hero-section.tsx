@@ -5,10 +5,12 @@ import { ArrowRight, Building2, Users, Award } from 'lucide-react';
 import SafeLink from './safe-link';
 import { useState, useEffect } from 'react';
 import { useImagePath } from '@/hooks/useImagePath';
+import { getPageContent } from '@/lib/page-content';
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [content, setContent] = useState(getPageContent('home'));
   
   // Video dosyası varsa buraya ekleyin (public klasöründen)
   // Örnek: '/hero-video.mp4'
@@ -42,6 +44,44 @@ const HeroSection = () => {
       return () => clearInterval(timer);
     }
   }, [slides.length, heroVideo]);
+
+  // localStorage'dan güncellemeleri dinle
+  useEffect(() => {
+    const updateContent = () => {
+      const newContent = getPageContent('home');
+      setContent(newContent);
+    };
+    
+    // İlk yükleme
+    updateContent();
+    
+    // Storage değişikliklerini dinle (farklı tab'lardan)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_page_home') {
+        updateContent();
+      }
+    };
+    
+    // Custom event dinle (aynı sayfadan)
+    const handleLocalStorageUpdated = (e: CustomEvent) => {
+      if (e.detail?.key === 'admin_page_home') {
+        updateContent();
+      }
+    };
+    
+    // Event listener'ları ekle
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+    
+    // Her 500ms'de bir kontrol et
+    const interval = setInterval(updateContent, 500);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageUpdated', handleLocalStorageUpdated as EventListener);
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -126,10 +166,19 @@ const HeroSection = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Geleceği İnşa Eden <span className="text-blue-300">Güven</span>
+              {content.heroTitle ? (
+                <>
+                  {content.heroTitle.split(' ').slice(0, -1).join(' ')}{' '}
+                  <span className="text-blue-300">{content.heroTitle.split(' ').slice(-1)[0]}</span>
+                </>
+              ) : (
+                <>
+                  Geleceği İnşa Eden <span className="text-blue-300">Güven</span>
+                </>
+              )}
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.
+              {content.heroSubtitle || 'Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.'}
             </p>
           </motion.div>
 
@@ -143,14 +192,14 @@ const HeroSection = () => {
               href="/projeler"
               className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-xl hover:shadow-2xl group"
             >
-              Projelerimizi Keşfedin
+              {content.heroButton1 || 'Projelerimizi Keşfedin'}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </SafeLink>
             <SafeLink
               href="/iletisim"
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-900 rounded-lg font-semibold hover:bg-blue-50 transition-all shadow-xl"
             >
-              Bize Ulaşın
+              {content.heroButton2 || 'Bize Ulaşın'}
             </SafeLink>
           </motion.div>
 
@@ -163,18 +212,18 @@ const HeroSection = () => {
           >
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 shadow-xl">
               <Building2 className="w-12 h-12 text-blue-300 mx-auto mb-3" />
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">250+</h3>
-              <p className="text-blue-200">Tamamlanan Proje</p>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">{content.stat1Value || '250+'}</h3>
+              <p className="text-blue-200">{content.stat1Label || 'Tamamlanan Proje'}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 shadow-xl">
               <Users className="w-12 h-12 text-blue-300 mx-auto mb-3" />
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">30+</h3>
-              <p className="text-blue-200">Yıllık Deneyim</p>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">{content.stat2Value || '30+'}</h3>
+              <p className="text-blue-200">{content.stat2Label || 'Yıllık Deneyim'}</p>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 shadow-xl">
               <Award className="w-12 h-12 text-blue-300 mx-auto mb-3" />
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">15+</h3>
-              <p className="text-blue-200">Ödül ve Sertifika</p>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">{content.stat3Value || '15+'}</h3>
+              <p className="text-blue-200">{content.stat3Label || 'Ödül ve Sertifika'}</p>
             </div>
           </motion.div>
         </div>

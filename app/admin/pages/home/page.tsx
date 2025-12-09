@@ -8,6 +8,14 @@ import { getBasePath } from '@/lib/getBasePath';
 const defaultFormData = {
   heroTitle: 'Geleceği İnşa Eden Güven',
   heroSubtitle: 'Modern mimari çözümler ve kaliteli yapılar ile hayallerinizi gerçeğe dönüştürüyoruz.',
+  heroButton1: 'Projelerimizi Keşfedin',
+  heroButton2: 'Bize Ulaşın',
+  stat1Value: '250+',
+  stat1Label: 'Tamamlanan Proje',
+  stat2Value: '30+',
+  stat2Label: 'Yıllık Deneyim',
+  stat3Value: '15+',
+  stat3Label: 'Ödül ve Sertifika',
   aboutTitle: 'BağKent A.Ş. Hakkında',
   aboutText1: 'BağKent A.Ş., 30 yılı aşkın süredir inşaat sektöründe faaliyet gösteren, güvenilir ve köklü bir firmadır. Modern mimari çözümler, kaliteli işçilik ve müşteri memnuniyeti odaklı yaklaşımımızla İstanbul\'un önemli projelerine imza atıyoruz.',
   aboutText2: 'Konut projelerinden ticari yapılara, altyapı çalışmalarından restorasyon projelerine kadar geniş bir yelpazede hizmet sunmaktayız. Her projede aynı özen ve kalite anlayışıyla çalışarak, sektördeki lider konumumuzu sürdürüyoruz.',
@@ -109,6 +117,111 @@ export default function EditHomePage() {
             rows={3}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
           />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Hero Buton 1 Metni
+            </label>
+            <input
+              type="text"
+              value={formData.heroButton1}
+              onChange={(e) => setFormData({ ...formData, heroButton1: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Hero Buton 2 Metni
+            </label>
+            <input
+              type="text"
+              value={formData.heroButton2}
+              onChange={(e) => setFormData({ ...formData, heroButton2: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <div className="border-t pt-6 mt-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">İstatistikler</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İstatistik 1 - Değer
+              </label>
+              <input
+                type="text"
+                value={formData.stat1Value}
+                onChange={(e) => setFormData({ ...formData, stat1Value: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                placeholder="250+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İstatistik 1 - Etiket
+              </label>
+              <input
+                type="text"
+                value={formData.stat1Label}
+                onChange={(e) => setFormData({ ...formData, stat1Label: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                placeholder="Tamamlanan Proje"
+              />
+            </div>
+            <div className="hidden md:block"></div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İstatistik 2 - Değer
+              </label>
+              <input
+                type="text"
+                value={formData.stat2Value}
+                onChange={(e) => setFormData({ ...formData, stat2Value: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                placeholder="30+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İstatistik 2 - Etiket
+              </label>
+              <input
+                type="text"
+                value={formData.stat2Label}
+                onChange={(e) => setFormData({ ...formData, stat2Label: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                placeholder="Yıllık Deneyim"
+              />
+            </div>
+            <div className="hidden md:block"></div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İstatistik 3 - Değer
+              </label>
+              <input
+                type="text"
+                value={formData.stat3Value}
+                onChange={(e) => setFormData({ ...formData, stat3Value: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                placeholder="15+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                İstatistik 3 - Etiket
+              </label>
+              <input
+                type="text"
+                value={formData.stat3Label}
+                onChange={(e) => setFormData({ ...formData, stat3Label: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                placeholder="Ödül ve Sertifika"
+              />
+            </div>
+          </div>
         </div>
 
         <div>
